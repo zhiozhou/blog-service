@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.zhou.domain.dao.BlogDAO">
+
+    <update id="update" parameterType="BlogPO">
+        UPDATE zhousb_blog
+        <set>
+            pv = #{pv}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="getPrev"  parameterType="BlogDTO" resultType="BlogPO">
+        SELECT id, title, type FROM zhousb_blog WHERE id &lt; #{id} AND type = #{type} ORDER BY id DESC LIMIT 1
+    </select>
+
+    <select id="getNext"  parameterType="BlogDTO" resultType="BlogPO">
+        SELECT id, title, type FROM zhousb_blog WHERE id &gt; #{id}  AND type = #{type} LIMIT 1
+    </select>
+
+
+    <select id="get" parameterType="BlogDTO" resultType="BlogPO">
+        SELECT
+            title,
+            zhousb_blog.type,
+            system_dict_data.label typeLabel,
+            content,
+            remark,
+            pv,
+            gmt_create
+        FROM
+            zhousb_blog
+        LEFT JOIN system_dict_data ON zhousb_blog.type = system_dict_data.`code`  AND system_dict_data.dict_key = 'blog_type'
+        WHERE
+            state = 0 and zhousb_blog.id = #{id}
+    </select>
+
+    <select id="list" parameterType="BlogDTO" resultType="BlogPO">
+        SELECT
+            zhousb_blog.id,
+            title,
+            preview,
+            remark,
+            pv,
+            gmt_create
+        FROM
+            zhousb_blog
+        LEFT JOIN system_dict_data ON zhousb_blog.type = system_dict_data.`code`  AND system_dict_data.dict_key = 'blog_type'
+        <where>
+            state = 0
+            <if test="type != null  "> and zhousb_blog.type = #{type}</if>
+        </where>
+        ORDER BY zhousb_blog.id DESC
+    </select>
+
+</mapper>

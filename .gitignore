@@ -1,0 +1,14 @@
+logs
+*.class
+*.jar
+*.war
+*.ear
+.classpath
+.project
+target
+.settings
+.idea
+*.iml
+# git
+*.orig
+

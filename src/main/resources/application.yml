@@ -1,0 +1,87 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: mini-mall
+  datasource:
+    username: root
+    password: a2080211280
+    url: jdbc:mysql://59.110.166.116:3306/zhousb_db?serverTimezone=Asia/Shanghai&useAffectedRows=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    database: 0
+    host: 127.0.0.1
+    password:
+    port: 6379
+    timeout: 50s
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  type-aliases-package: priv.zhou.domain
+  configuration:
+    map-underscore-to-camel-case: true
+logging:
+  path: logs/
+#活动参数设置
+app:
+  enc: UTF-8
+  name: ${spring.application.name}
+  access-limit: 200
+  admin-email: flyingnoob@qq.com
+--- # --------------------------------------------- 正式环境 -------------------------------------------------------
+server:
+  port: 8100
+spring:
+  profiles: prod
+  application:
+    name: zhousb-api
+  datasource:
+    username: ENC(4tON3HWNbp+2fpzDD/CJdQ==)
+    password: ENC(7tU3j83fuVlwx3i3s8bxZAzAVaY39mpp)
+    url: jdbc:mysql://127.0.0.1:3306/zhousb_db?serverTimezone=Asia/Shanghai&useAffectedRows=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    database: 0
+    host: 127.0.0.1
+    password: ENC(H1dbY0iQVMvilQXpfEMuoxCeWyfg7Emx)
+    port: 6379
+    timeout: 50s
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+  mail:
+    host: smtp.qq.com
+    username: flyingnoob@qq.com
+    password: ENC(0HLXK/wlJyYUgC1zNpww7M/YpufzZbk+JdsNg/aBVfc=)
+    port: 465
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  type-aliases-package: priv.zhou.domain
+  configuration:
+    map-underscore-to-camel-case: true
+logging:
+  path: logs/
+#活动参数设置
+app:
+  enc: UTF-8
+  name: ${spring.application.name}
+  access-limit: 200
+  admin-email: flyingnoob@qq.com
+
+
+
+
