@@ -6,9 +6,12 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 import priv.zhou.domain.Page;
 import priv.zhou.domain.dao.BlogDAO;
+import priv.zhou.domain.dao.BlogTypeDAO;
 import priv.zhou.domain.dto.BlogDTO;
+import priv.zhou.domain.dto.BlogTypeDTO;
 import priv.zhou.domain.dto.DTO;
 import priv.zhou.domain.po.BlogPO;
+import priv.zhou.domain.po.BlogTypePO;
 import priv.zhou.domain.vo.OutVO;
 import priv.zhou.params.OutVOEnum;
 import priv.zhou.service.IBlogService;
@@ -16,8 +19,7 @@ import priv.zhou.tools.RedisUtil;
 
 import java.util.List;
 
-import static priv.zhou.params.CONSTANT.BLOG_KEY;
-import static priv.zhou.params.CONSTANT.BLOG_PV_KEY;
+import static priv.zhou.params.CONSTANT.*;
 
 
 /**
@@ -31,8 +33,11 @@ public class BlogServiceImpl implements IBlogService {
 
     private final BlogDAO blogDAO;
 
-    public BlogServiceImpl(BlogDAO blogDAO) {
+    private final BlogTypeDAO blogTypeDAO;
+
+    public BlogServiceImpl(BlogDAO blogDAO, BlogTypeDAO blogTypeDAO) {
         this.blogDAO = blogDAO;
+        this.blogTypeDAO = blogTypeDAO;
     }
 
     @Override
@@ -62,6 +67,21 @@ public class BlogServiceImpl implements IBlogService {
         }
         return OutVO.success(new BlogDTO(blogPO));
     }
+
+
+    @Override
+    public OutVO getType(String key) {
+        String typeKye = BLOG_TYPE_KEY + key;
+        BlogTypePO blogTypePO = (BlogTypePO) RedisUtil.get(typeKye);
+        if (null == blogTypePO) {
+            if (null == (blogTypePO = blogTypeDAO.get(new BlogTypeDTO().setKey(key)))) {
+                return OutVO.fail(OutVOEnum.NOT_FOUND);
+            }
+            RedisUtil.set(typeKye, blogTypePO);
+        }
+        return OutVO.success(new BlogTypeDTO(blogTypePO));
+    }
+
 
     @Override
     public OutVO list(BlogDTO blogDTO, Page page) {

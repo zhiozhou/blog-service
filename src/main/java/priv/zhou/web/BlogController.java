@@ -8,7 +8,6 @@ import priv.zhou.domain.dto.BlogDTO;
 import priv.zhou.domain.vo.OutVO;
 import priv.zhou.service.IBlogService;
 
-import javax.validation.Valid;
 
 /**
  * 控制层
@@ -31,11 +30,14 @@ public class BlogController {
         return blogService.get(id);
     }
 
+    @RequestMapping("/type/get/{key}")
+    public OutVO getType(@PathVariable String key) {
+        return blogService.getType(key);
+    }
+
 
     @RequestMapping("/list")
     public OutVO list(BlogDTO blogDTO, Page page) {
         return blogService.list(blogDTO, page);
     }
-
-
 }

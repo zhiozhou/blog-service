@@ -34,14 +34,12 @@ public class BlogDTO extends DTO<BlogPO> {
     private String title;
 
 
-    private String titleLike;
-
     /**
      * 文章类型
      */
     private String type;
 
-    private String typeLabel;
+    private String typeName;
 
     /**
      * 内容

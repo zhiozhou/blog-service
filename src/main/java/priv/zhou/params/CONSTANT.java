@@ -15,6 +15,8 @@ public interface CONSTANT {
 
     String BLOG_KEY = REDIS_PREFIX + "BLOG_KEY";
 
+    String BLOG_TYPE_KEY = REDIS_PREFIX + "BLOG_TYPE_KEY";
+
     String BLOG_PV_KEY = REDIS_PREFIX + "BLOG_PV_KEY";
 
 

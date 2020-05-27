@@ -2,6 +2,7 @@ package priv.zhou.service;
 
 import priv.zhou.domain.Page;
 import priv.zhou.domain.dto.BlogDTO;
+import priv.zhou.domain.dto.BlogTypeDTO;
 import priv.zhou.domain.vo.OutVO;
 
 /**
@@ -13,6 +14,8 @@ import priv.zhou.domain.vo.OutVO;
 public interface IBlogService {
 
     OutVO get(Integer id);
+
+    OutVO getType(String key);
 
     OutVO list(BlogDTO blogDTO, Page page);
 }

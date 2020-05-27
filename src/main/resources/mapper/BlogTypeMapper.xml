@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.zhou.domain.dao.BlogTypeDAO">
+
+    <select id="get" parameterType="BlogTypeDTO" resultType="BlogTypePO">
+         SELECT
+            id,
+            `name`,
+            title,
+            `desc`,
+            bg,
+            remark
+        FROM
+            zhousb_blog_type
+        WHERE
+            state = 0
+            AND `key` = #{key}
+    </select>
+</mapper>
