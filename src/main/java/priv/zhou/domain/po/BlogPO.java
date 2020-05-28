@@ -47,6 +47,11 @@ public class BlogPO implements Serializable{
 	private String preview;
 
 	/**
+	 * 预览图
+	 */
+	private String previewImg;
+
+	/**
 	 * 备注
 	 */
 	private String remark;

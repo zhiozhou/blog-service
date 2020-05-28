@@ -47,9 +47,14 @@ public class BlogDTO extends DTO<BlogPO> {
     private String content;
 
     /**
-     * 预览
+     * 预览文字
      */
     private String preview;
+
+    /**
+     * 预览图
+     */
+    private String previewImg;
 
     /**
      * 备注

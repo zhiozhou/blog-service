@@ -43,6 +43,7 @@
             id,
             title,
             preview,
+            preview_img,
             remark,
             pv,
             gmt_create
