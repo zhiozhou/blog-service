@@ -34,7 +34,15 @@ public class BlogPO implements Serializable{
 	 */
 	private String type;
 
-	private String typeLabel;
+	/**
+	 * 类型地址
+	 */
+	private String typePath ;
+
+	/**
+	 * 类型名称
+	 */
+	private String typeName;
 
 	/**
 	 * 内容

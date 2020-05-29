@@ -13,7 +13,7 @@ import priv.zhou.service.IMenuService;
  * @since 2020.05.15
  */
 @RestController
-@RequestMapping("/blog")
+@RequestMapping("/menu")
 public class MenuController {
 
     private final IMenuService menuService;

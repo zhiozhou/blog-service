@@ -39,7 +39,21 @@ public class BlogDTO extends DTO<BlogPO> {
      */
     private String type;
 
+    /**
+     * 排除的文章类型
+     */
+    private String noType;
+
+    /**
+     * 类型地址
+     */
+    private String typePath ;
+
+    /**
+     * 类型名称
+     */
     private String typeName;
+
 
     /**
      * 内容
@@ -81,7 +95,6 @@ public class BlogDTO extends DTO<BlogPO> {
 
 
     private BlogDTO next;
-
 
     public BlogDTO(BlogPO blogPO) {
         super(blogPO);

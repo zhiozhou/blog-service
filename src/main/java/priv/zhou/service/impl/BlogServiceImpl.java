@@ -3,6 +3,7 @@ package priv.zhou.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import priv.zhou.domain.Page;
 import priv.zhou.domain.dao.BlogDAO;
@@ -85,6 +86,9 @@ public class BlogServiceImpl implements IBlogService {
 
     @Override
     public OutVO list(BlogDTO blogDTO, Page page) {
+        if (StringUtils.isBlank(blogDTO.getType())) {
+            blogDTO.setNoType(ALBUM);
+        }
 
         PageHelper.startPage(page.getPage(), page.getLimit(), page.isCount());
         List<BlogPO> poList = blogDAO.list(blogDTO);

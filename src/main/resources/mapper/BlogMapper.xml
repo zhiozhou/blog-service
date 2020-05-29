@@ -24,15 +24,17 @@
     <select id="get" parameterType="BlogDTO" resultType="BlogPO">
         SELECT
             zhousb_blog.title,
-            type,
-            zhousb_blog_type.`name` typeName,
+            zhousb_blog.type,
+            system_menu.`path` typePath,
+            system_menu.`name` typeName,
             content,
             zhousb_blog.remark,
             pv,
             zhousb_blog.gmt_create
         FROM
             zhousb_blog
-            LEFT JOIN zhousb_blog_type ON type = zhousb_blog_type.`key`
+            LEFT JOIN system_menu ON zhousb_blog.type = system_menu.`key`
+            AND flag = 2
         WHERE
             zhousb_blog.state = 0
             AND zhousb_blog.id = #{id}
@@ -40,20 +42,25 @@
 
     <select id="list" parameterType="BlogDTO" resultType="BlogPO">
         SELECT
-            id,
-            title,
+            zhousb_blog.id,
+            zhousb_blog.title,
+            zhousb_blog.type,
+            system_menu.`path` typePath,
+            system_menu.`name` typeName,
             preview,
             preview_img,
-            remark,
+            zhousb_blog.remark,
             pv,
-            gmt_create
+            zhousb_blog.gmt_create
         FROM
             zhousb_blog
+        LEFT JOIN system_menu ON zhousb_blog.type = system_menu.`key` AND flag = 2
         <where>
-            state = 0
-            <if test="type != null  "> and type = #{type}</if>
+            zhousb_blog.state = 0
+            <if test="type != null"> and zhousb_blog.type = #{type}</if>
+            <if test="noType != null"> and zhousb_blog.type != #{noType}</if>
         </where>
-        ORDER BY id DESC
+        ORDER BY gmt_create DESC
     </select>
 
 </mapper>
