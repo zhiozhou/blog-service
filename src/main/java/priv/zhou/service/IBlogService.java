@@ -6,7 +6,7 @@ import priv.zhou.domain.dto.BlogTypeDTO;
 import priv.zhou.domain.vo.OutVO;
 
 /**
- *  服务层定义
+ *  博客 服务层定义
  *
  * @author zhou
  * @since 2020.05.15

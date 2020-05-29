@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- *  数据持久化模型
+ * 博客类型 数据持久化模型
  *
  * @author zhou
  * @since 2020.05.21

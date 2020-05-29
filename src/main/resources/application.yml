@@ -2,7 +2,7 @@ server:
   port: 8080
 spring:
   application:
-    name: mini-mall
+    name: blog-service
   datasource:
     username: root
     password: a2080211280
@@ -39,7 +39,7 @@ server:
 spring:
   profiles: prod
   application:
-    name: zhousb-api
+    name: blog-service
   datasource:
     username: ENC(4tON3HWNbp+2fpzDD/CJdQ==)
     password: ENC(7tU3j83fuVlwx3i3s8bxZAzAVaY39mpp)

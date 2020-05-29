@@ -11,7 +11,7 @@ import java.util.Date;
 
 
 /**
- * 数据传输模型
+ * 博客 数据传输模型
  *
  * @author zhou
  * @since 2020.05.15

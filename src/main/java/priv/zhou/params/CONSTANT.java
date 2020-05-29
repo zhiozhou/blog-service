@@ -20,4 +20,7 @@ public interface CONSTANT {
     String BLOG_PV_KEY = REDIS_PREFIX + "BLOG_PV_KEY";
 
 
+    String MENU_KEY = REDIS_PREFIX + "MENU_KEY";
+
+
 }
