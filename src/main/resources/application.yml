@@ -5,8 +5,8 @@ spring:
     name: blog-service
   datasource:
     username: root
-    password: a2080211280
-    url: jdbc:mysql://59.110.166.116:3306/zhousb_db?serverTimezone=Asia/Shanghai&useAffectedRows=true
+    password: 123456
+    url: jdbc:mysql://127.0.0.1:3306/test_db?serverTimezone=Asia/Shanghai&useAffectedRows=true
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     database: 0

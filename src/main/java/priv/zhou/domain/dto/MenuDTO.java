@@ -9,6 +9,7 @@ import priv.zhou.domain.po.MenuPO;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.List;
 
 
@@ -23,7 +24,7 @@ import java.util.List;
 @NoArgsConstructor
 @Accessors(chain = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class MenuDTO extends DTO<MenuPO> {
+public class MenuDTO extends DTO<MenuPO> implements Serializable {
 
     /**
      * id

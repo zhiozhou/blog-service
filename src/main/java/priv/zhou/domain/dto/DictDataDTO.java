@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 import priv.zhou.domain.po.DictDataPO;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 
 /**
  * 字典数据 数据传输模型
@@ -18,7 +19,7 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @NoArgsConstructor
 @Accessors(chain = true)
-public class DictDataDTO extends DTO<DictDataPO> {
+public class DictDataDTO extends DTO<DictDataPO> implements Serializable {
 
     /**
      * 标识码
