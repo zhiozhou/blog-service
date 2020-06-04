@@ -15,7 +15,7 @@ public interface IBlogService {
 
     OutVO get(BlogDTO blogDTO);
 
-    OutVO getType(String key);
+    OutVO getType(BlogTypeDTO blogTypeDTO);
 
     OutVO list(BlogDTO blogDTO, Page page);
 

@@ -15,7 +15,7 @@
         FROM
             zhousb_blog_type
         WHERE
-            state = 0
+            state != 11
             AND `key` = #{key}
     </select>
 </mapper>

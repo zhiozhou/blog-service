@@ -5,8 +5,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.domain.Page;
 import priv.zhou.domain.dto.BlogDTO;
+import priv.zhou.domain.dto.BlogTypeDTO;
 import priv.zhou.domain.vo.OutVO;
 import priv.zhou.service.IBlogService;
+
+import javax.validation.Valid;
 
 
 /**
@@ -30,9 +33,9 @@ public class BlogController {
         return blogService.get(blogDTO);
     }
 
-    @RequestMapping("/type/get/{key}")
-    public OutVO getType(@PathVariable String key) {
-        return blogService.getType(key);
+    @RequestMapping("/type/get")
+    public OutVO getType(@Valid  BlogTypeDTO blogTypeDTO) {
+        return blogService.getType(blogTypeDTO);
     }
 
 

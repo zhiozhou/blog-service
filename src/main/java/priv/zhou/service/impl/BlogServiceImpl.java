@@ -84,11 +84,11 @@ public class BlogServiceImpl implements IBlogService {
 
 
     @Override
-    public OutVO getType(String key) {
-        String typeKye = BLOG_TYPE_KEY + key;
+    public OutVO getType(BlogTypeDTO blogTypeDTO) {
+        String typeKye = BLOG_TYPE_KEY + blogTypeDTO.getKey();
         BlogTypePO blogTypePO = (BlogTypePO) RedisUtil.get(typeKye);
         if (null == blogTypePO) {
-            if (null == (blogTypePO = blogTypeDAO.get(new BlogTypeDTO().setKey(key)))) {
+            if (null == (blogTypePO = blogTypeDAO.get(blogTypeDTO))) {
                 return OutVO.fail(OutVOEnum.NOT_FOUND);
             }
             RedisUtil.set(typeKye, blogTypePO);

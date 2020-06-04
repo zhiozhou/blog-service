@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import priv.zhou.domain.po.BlogTypePO;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 
@@ -28,6 +29,7 @@ public class BlogTypeDTO extends DTO<BlogTypePO> {
     /**
      * 标识
      */
+    @NotBlank(message = "标识不可为空")
     private String key;
 
 
