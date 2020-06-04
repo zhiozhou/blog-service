@@ -7,17 +7,19 @@
 
     <select id="list" parameterType="MenuDTO" resultType="MenuPO">
         SELECT
-            id,
+            system_menu.id,
             parent_id,
-            `name`,
-            `key`,
+            system_menu.`name`,
+            system_menu.`key`,
             path,
             icon,
-            type
+            type,
+            zhousb_blog_type.state blogTypeState
         FROM
             system_menu
+            LEFT JOIN zhousb_blog_type ON system_menu.`key` = zhousb_blog_type.`key`
         WHERE
-            state = 0
+            system_menu.state = 0
             AND flag = 2
         ORDER BY
             parent_id,

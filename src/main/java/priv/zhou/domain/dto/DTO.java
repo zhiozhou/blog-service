@@ -3,6 +3,7 @@ package priv.zhou.domain.dto;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
 
+import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,9 +59,16 @@ public abstract class DTO<PO> {
     }
 
     /**
+     * po转dto
+     */
+    public static <DT extends DTO<P>, P extends Serializable> DT ofPO(P po, Function<P, DT> constructor) {
+        return null == po ? null : constructor.apply(po);
+    }
+
+    /**
      * po集合转换为dto集合
      */
-    public static <DT extends DTO<P>, P> List<DT> ofPO(List<P> poList, Function<P, DT> constructor) {
+    public static <DT extends DTO<P>, P extends Serializable> List<DT> ofPO(List<P> poList, Function<P, DT> constructor) {
         List<DT> DTList = new ArrayList<>();
         if (Objects.isNull(poList) || poList.isEmpty()) {
             return DTList;

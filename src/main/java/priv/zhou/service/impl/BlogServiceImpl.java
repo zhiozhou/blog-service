@@ -36,29 +36,42 @@ public class BlogServiceImpl implements IBlogService {
 
     private final BlogTypeDAO blogTypeDAO;
 
+    private final Integer SINGLE_BLOG_STATE = 7;
+
     public BlogServiceImpl(BlogDAO blogDAO, BlogTypeDAO blogTypeDAO) {
         this.blogDAO = blogDAO;
         this.blogTypeDAO = blogTypeDAO;
     }
 
     @Override
-    public OutVO get(Integer id) {
-        String poKey = BLOG_KEY + id;
+    public OutVO get(BlogDTO blogDTO) {
+
+        // 可按 id || 单文章key 来获取
+        String poKey = null != blogDTO.getId() ? BLOG_KEY + blogDTO.getId() :
+                null != blogDTO.getType() && StringUtils.isBlank(blogDTO.getType().getKey()) ?
+                        BLOG_KEY + blogDTO.getType() : null;
+        if (null == poKey) {
+            return OutVO.fail(OutVOEnum.EMPTY_PARAM);
+        }
+
         BlogPO blogPO = (BlogPO) RedisUtil.get(poKey);
         if (null == blogPO) {
-            BlogDTO queryDTO = new BlogDTO().setId(id);
-            if (null == (blogPO = blogDAO.get(queryDTO))) {
+            if (null == (blogPO = blogDAO.get(blogDTO))) {
                 return OutVO.fail(OutVOEnum.NOT_FOUND);
             }
-            queryDTO.setType(blogPO.getType());
-            blogPO.setPrev(blogDAO.getPrev(queryDTO))
-                    .setNext(blogDAO.getNext(queryDTO));
+            if (!SINGLE_BLOG_STATE.equals(blogPO.getType().getState())) {
+                BlogDTO queryDTO = new BlogDTO()
+                        .setId(blogPO.getId())
+                        .setType(new BlogTypeDTO().setKey(blogPO.getType().getKey()));
+                blogPO.setPrev(blogDAO.getPrev(queryDTO))
+                        .setNext(blogDAO.getNext(queryDTO));
+            }
             RedisUtil.set(poKey, blogPO);
         }
 
         // TODO: 部署多体改为Reids同步
         synchronized (BLOG_PV_KEY) {
-            String pvKey = id.toString();
+            String pvKey = blogPO.getId().toString();
             Long pv = (Long) RedisUtil.getHash(BLOG_PV_KEY, pvKey);
             if (null == pv) {
                 pv = blogPO.getPv();
@@ -86,10 +99,6 @@ public class BlogServiceImpl implements IBlogService {
 
     @Override
     public OutVO list(BlogDTO blogDTO, Page page) {
-        if (StringUtils.isBlank(blogDTO.getType())) {
-            blogDTO.setNoType(ALBUM);
-        }
-
         PageHelper.startPage(page.getPage(), page.getLimit(), page.isCount());
         List<BlogPO> poList = blogDAO.list(blogDTO);
         PageInfo<BlogPO> pageInfo = new PageInfo<>(poList);

@@ -30,21 +30,6 @@ public class BlogPO implements Serializable{
 	private String title;
 
 	/**
-	 * 文章类型
-	 */
-	private String type;
-
-	/**
-	 * 类型地址
-	 */
-	private String typePath ;
-
-	/**
-	 * 类型名称
-	 */
-	private String typeName;
-
-	/**
 	 * 内容
 	 */
 	private String content;
@@ -88,6 +73,16 @@ public class BlogPO implements Serializable{
 	private BlogPO prev;
 
 	private BlogPO next;
+
+	/**
+	 * 类型
+	 */
+	private BlogTypePO type;
+
+	/**
+	 * 所属菜单
+	 */
+	private MenuPO menu;
 
 	@Override
 	public String toString() {

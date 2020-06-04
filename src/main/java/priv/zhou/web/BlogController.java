@@ -25,9 +25,9 @@ public class BlogController {
         this.blogService = blogService;
     }
 
-    @RequestMapping("/get/{id}")
-    public OutVO get(@PathVariable Integer id) {
-        return blogService.get(id);
+    @RequestMapping("/get")
+    public OutVO get(BlogDTO blogDTO) {
+        return blogService.get(blogDTO);
     }
 
     @RequestMapping("/type/get/{key}")

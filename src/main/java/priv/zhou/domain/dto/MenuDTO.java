@@ -65,6 +65,12 @@ public class MenuDTO extends DTO<MenuPO> implements Serializable {
     private String key;
 
     /**
+     * 博客类型状态
+     */
+    private Integer blogTypeState;
+
+
+    /**
      * 子级列表
      */
     private List<MenuDTO> childList;

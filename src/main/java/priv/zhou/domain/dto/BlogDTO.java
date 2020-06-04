@@ -33,28 +33,6 @@ public class BlogDTO extends DTO<BlogPO> {
      */
     private String title;
 
-
-    /**
-     * 文章类型
-     */
-    private String type;
-
-    /**
-     * 排除的文章类型
-     */
-    private String noType;
-
-    /**
-     * 类型地址
-     */
-    private String typePath ;
-
-    /**
-     * 类型名称
-     */
-    private String typeName;
-
-
     /**
      * 内容
      */
@@ -93,13 +71,25 @@ public class BlogDTO extends DTO<BlogPO> {
 
     private BlogDTO prev;
 
-
     private BlogDTO next;
+
+    /**
+     * 类型
+     */
+    private BlogTypeDTO type;
+
+    /**
+     * 所属菜单
+     */
+    private MenuDTO menu;
+
 
     public BlogDTO(BlogPO blogPO) {
         super(blogPO);
-        this.prev = null == blogPO.getPrev() ? null : new BlogDTO(blogPO.getPrev());
-        this.next = null == blogPO.getNext() ? null : new BlogDTO(blogPO.getNext());
+        this.prev = DTO.ofPO(blogPO.getPrev(), BlogDTO::new);
+        this.next = DTO.ofPO(blogPO.getNext(), BlogDTO::new);
+        this.menu = DTO.ofPO(blogPO.getMenu(), MenuDTO::new);
+        this.type = DTO.ofPO(blogPO.getType(), BlogTypeDTO::new);
     }
 
 }

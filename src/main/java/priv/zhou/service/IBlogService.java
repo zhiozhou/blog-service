@@ -13,9 +13,11 @@ import priv.zhou.domain.vo.OutVO;
  */
 public interface IBlogService {
 
-    OutVO get(Integer id);
+    OutVO get(BlogDTO blogDTO);
 
     OutVO getType(String key);
 
     OutVO list(BlogDTO blogDTO, Page page);
+
+
 }

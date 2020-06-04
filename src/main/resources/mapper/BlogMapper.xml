@@ -4,6 +4,27 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="priv.zhou.domain.dao.BlogDAO">
 
+    <resultMap id="BlogMap" type="BlogPO">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="preview" property="preview"/>
+        <result column="preview_img" property="previewImg"/>
+        <result column="remark" property="remark"/>
+        <result column="pv" property="pv"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <association property="type" javaType="BlogTypePO">
+            <result column="type_key" property="key"/>
+            <result column="type_name" property="name"/>
+            <result column="type_state" property="state"/>
+        </association>
+        <association property="menu" javaType="MenuPO">
+            <result column="menu_name" property="name"/>
+            <result column="menu_path" property="path"/>
+        </association>
+    </resultMap>
+
+
     <update id="update" parameterType="BlogPO">
         UPDATE zhousb_blog
         <set>
@@ -12,41 +33,46 @@
         WHERE id = #{id}
     </update>
 
-
     <select id="getPrev"  parameterType="BlogDTO" resultType="BlogPO">
-        SELECT id, title, type FROM zhousb_blog WHERE id &lt; #{id} AND type = #{type} ORDER BY id DESC LIMIT 1
+        SELECT id, title, type FROM zhousb_blog WHERE id &lt; #{id} AND type = #{type.key} ORDER BY id DESC LIMIT 1
     </select>
 
     <select id="getNext"  parameterType="BlogDTO" resultType="BlogPO">
-        SELECT id, title, type FROM zhousb_blog WHERE id &gt; #{id}  AND type = #{type} LIMIT 1
+        SELECT id, title, type FROM zhousb_blog WHERE id &gt; #{id}  AND type = #{type.key} LIMIT 1
     </select>
 
-    <select id="get" parameterType="BlogDTO" resultType="BlogPO">
+    <select id="get" parameterType="BlogDTO" resultMap="BlogMap">
         SELECT
+            zhousb_blog.id,
             zhousb_blog.title,
-            zhousb_blog.type,
-            system_menu.`path` typePath,
-            system_menu.`name` typeName,
+            zhousb_blog_type.key type_key,
+            zhousb_blog_type.name type_name,
+            zhousb_blog_type.state type_state,
+            system_menu.`name` menu_name,
+            system_menu.`path` menu_path,
             content,
             zhousb_blog.remark,
             pv,
             zhousb_blog.gmt_create
         FROM
             zhousb_blog
-            LEFT JOIN system_menu ON zhousb_blog.type = system_menu.`key`
-            AND flag = 2
-        WHERE
+            LEFT JOIN zhousb_blog_type ON zhousb_blog.type = zhousb_blog_type.`key`
+            LEFT JOIN system_menu ON zhousb_blog_type.`key` = system_menu.`key` AND flag = 2
+        <where>
             zhousb_blog.state = 0
-            AND zhousb_blog.id = #{id}
+            <if test="id != null">and zhousb_blog.id = #{id} </if>
+            <if test="type != null and type.key != null">and zhousb_blog_type.state = 7 and zhousb_blog.type = #{type.key}</if>
+        </where>
     </select>
 
-    <select id="list" parameterType="BlogDTO" resultType="BlogPO">
+    <select id="list" parameterType="BlogDTO" resultMap="BlogMap">
         SELECT
             zhousb_blog.id,
             zhousb_blog.title,
-            zhousb_blog.type,
-            system_menu.`path` typePath,
-            system_menu.`name` typeName,
+            zhousb_blog_type.key type_key,
+            zhousb_blog_type.name type_name,
+            system_menu.`name` menu_name,
+            system_menu.`path` menu_path,
             preview,
             preview_img,
             zhousb_blog.remark,
@@ -54,11 +80,12 @@
             zhousb_blog.gmt_create
         FROM
             zhousb_blog
-        LEFT JOIN system_menu ON zhousb_blog.type = system_menu.`key` AND flag = 2
+            LEFT JOIN zhousb_blog_type ON zhousb_blog.type = zhousb_blog_type.`key`
+            LEFT JOIN system_menu ON zhousb_blog_type.`key` = system_menu.`key` AND flag = 2
         <where>
             zhousb_blog.state = 0
-            <if test="type != null"> and zhousb_blog.type = #{type}</if>
-            <if test="noType != null"> and zhousb_blog.type != #{noType}</if>
+            <if test="type == null"> and zhousb_blog_type.state = 0 </if>
+            <if test="type != null and type.key != null"> and zhousb_blog.type = #{type.key}</if>
         </where>
         ORDER BY gmt_create DESC
     </select>

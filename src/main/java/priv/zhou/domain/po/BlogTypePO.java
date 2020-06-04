@@ -60,6 +60,11 @@ public class BlogTypePO implements Serializable{
 	private Integer state;
 
 	/**
+	 * 博客类型状态
+	 */
+	private Integer blogTypeState;
+
+	/**
 	 * 创建时间
 	 */
 	private Date gmtCreate;

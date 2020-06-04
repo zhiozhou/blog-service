@@ -26,12 +26,6 @@ public class BlogTypeDTO extends DTO<BlogTypePO> {
 
 
     /**
-     * 
-     */
-    private Integer id;
-
-
-    /**
      * 标识
      */
     private String key;
@@ -48,7 +42,6 @@ public class BlogTypeDTO extends DTO<BlogTypePO> {
      */
     private String title;
 
-
     /**
      * 描述
      */
@@ -59,10 +52,6 @@ public class BlogTypeDTO extends DTO<BlogTypePO> {
      */
     private String bg;
 
-    /**
-     * 备注
-     */
-    private String remark;
 
     /**
      * 创建时间
