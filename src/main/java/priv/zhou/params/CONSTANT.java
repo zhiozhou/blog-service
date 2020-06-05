@@ -3,11 +3,9 @@ package priv.zhou.params;
 
 public interface CONSTANT {
 
-    String ALBUM = "album";
-
     /***********************************************************  REDIS KEYS  ***********************************************************/
 
-    String REDIS_PREFIX = "REDIS_PREFIX";
+    String REDIS_PREFIX = "BLOG_REDIS_PREFIX";
 
     String BLOG_PV_KEY = REDIS_PREFIX + "BLOG_PV_KEY";
 

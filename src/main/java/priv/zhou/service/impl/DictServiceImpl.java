@@ -10,7 +10,9 @@ import priv.zhou.domain.vo.OutVO;
 import priv.zhou.service.IDictService;
 import priv.zhou.tools.RedisUtil;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static priv.zhou.params.CONSTANT.DICT_DATA_KEY;
 
@@ -30,14 +32,28 @@ public class DictServiceImpl implements IDictService {
     }
 
     @Override
+    public OutVO dataList(DictDataDTO dictDataDTO) {
+        return OutVO.success(DTO.ofPO(listData(dictDataDTO), DictDataDTO::new));
+    }
+
+    @Override
+    public OutVO dataMap(DictDataDTO dictDataDTO) {
+        List<DictDataPO> poList = listData(dictDataDTO);
+        Map<String, DictDataDTO> map = new LinkedHashMap<>();
+        for (DictDataPO po : poList) {
+            map.put(po.getCode(), new DictDataDTO(po));
+        }
+        return OutVO.success(map);
+    }
+
     @SuppressWarnings("unchecked")
-    public OutVO listData(DictDataDTO dictDataDTO) {
+    private List<DictDataPO> listData(DictDataDTO dictDataDTO) {
         String key = DICT_DATA_KEY + dictDataDTO.getDictKey();
         List<DictDataPO> poList = (List<DictDataPO>) RedisUtil.get(key);
-        if (null == poList) {
-            RedisUtil.set(DICT_DATA_KEY, poList = dictDataDAO.list(dictDataDTO));
+        if (null == poList && null != (poList = dictDataDAO.list(dictDataDTO))) {
+            RedisUtil.set(DICT_DATA_KEY, poList);
         }
-        return OutVO.success(DTO.ofPO(poList, DictDataDTO::new));
+        return poList;
     }
 
 }

@@ -36,20 +36,25 @@ public class MenuServiceImpl implements IMenuService {
     @SuppressWarnings("unchecked")
     public OutVO list() {
         List<MenuPO> poList = (List<MenuPO>) RedisUtil.get(MENU_KEY);
-        if (null == poList) {
-            RedisUtil.set(MENU_KEY, poList = menuDAO.list());
+        if (null == poList && null != (poList = menuDAO.list())) {
+            RedisUtil.set(MENU_KEY, poList);
         }
         return OutVO.success(toTree(DTO.ofPO(poList, MenuDTO::new)));
     }
 
     private List<MenuDTO> toTree(List<MenuDTO> dtoList) {
+        if (dtoList.isEmpty()) {
+            return dtoList;
+        }
         Integer rootId = 0;
         TreeMap<Integer, List<MenuDTO>> groupMap = dtoList.stream().collect(Collectors.groupingBy(MenuDTO::getParentId, TreeMap::new, Collectors.toList()));
         List<MenuDTO> outList = groupMap.get(rootId);
         for (Map.Entry<Integer, List<MenuDTO>> entry : groupMap.entrySet()) {
             if (!rootId.equals(entry.getKey())) {
                 MenuDTO parent = getMenu(dtoList, entry.getKey());
-                parent.setChildList(entry.getValue());
+                if (null != parent) {
+                    parent.setChildList(entry.getValue());
+                }
             }
         }
         return outList;
