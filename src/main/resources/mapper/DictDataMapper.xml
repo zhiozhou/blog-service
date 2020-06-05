@@ -13,7 +13,7 @@
             system_dict_data
         where
             type = 0
-            dict_key = #{dictKey}
+            and dict_key = #{dictKey}
     </select>
 
 

@@ -26,7 +26,13 @@ public class DictController {
     }
 
     @RequestMapping("/dataList")
-    public OutVO list(@Valid  DictDataDTO dictDataDTO) {
-        return dictService.listData(dictDataDTO);
+    public OutVO dataList(@Valid DictDataDTO dictDataDTO) {
+        return dictService.dataList(dictDataDTO);
     }
+
+    @RequestMapping("/dataMap")
+    public OutVO dataMap(@Valid DictDataDTO dictDataDTO) {
+        return dictService.dataMap(dictDataDTO);
+    }
+
 }

@@ -25,7 +25,7 @@ public class TimerTask {
 
 
     /**
-     * 每五分钟执行
+     * 每五分钟更新访问数
      */
     @Scheduled(fixedDelay = 5 * 60 * 1000)
     private void syncPV() {
@@ -35,5 +35,4 @@ public class TimerTask {
             blogDAO.update(new BlogPO().setId(ParseUtil.integer(entry.getKey())).setPv((Long) entry.getValue()));
         }
     }
-
 }
