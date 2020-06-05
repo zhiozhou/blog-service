@@ -24,7 +24,7 @@ import java.util.List;
 @NoArgsConstructor
 @Accessors(chain = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class MenuDTO extends DTO<MenuPO> implements Serializable {
+public class MenuDTO extends DTO<MenuPO>  {
 
     /**
      * id

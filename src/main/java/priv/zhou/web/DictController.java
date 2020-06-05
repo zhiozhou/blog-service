@@ -6,6 +6,8 @@ import priv.zhou.domain.dto.DictDataDTO;
 import priv.zhou.domain.vo.OutVO;
 import priv.zhou.service.IDictService;
 
+import javax.validation.Valid;
+
 
 /**
  * 字典 控制层
@@ -24,7 +26,7 @@ public class DictController {
     }
 
     @RequestMapping("/dataList")
-    public OutVO list(DictDataDTO dictDataDTO) {
+    public OutVO list(@Valid  DictDataDTO dictDataDTO) {
         return dictService.listData(dictDataDTO);
     }
 }

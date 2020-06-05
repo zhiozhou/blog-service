@@ -19,7 +19,7 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @Accessors(chain = true)
-public class DictDataDTO extends DTO<DictDataPO> implements Serializable {
+public class DictDataDTO extends DTO<DictDataPO>  {
 
     /**
      * 标识码

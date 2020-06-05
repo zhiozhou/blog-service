@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import priv.zhou.domain.dao.MenuDAO;
 import priv.zhou.domain.dto.DTO;
 import priv.zhou.domain.dto.MenuDTO;
+import priv.zhou.domain.po.MenuPO;
 import priv.zhou.domain.vo.OutVO;
 import priv.zhou.service.IMenuService;
 import priv.zhou.tools.RedisUtil;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 import static priv.zhou.params.CONSTANT.MENU_KEY;
 
 /**
- *  菜单 服务层实现
+ * 菜单 服务层实现
  *
  * @author zhou
  * @since 2020.05.29
@@ -32,12 +33,13 @@ public class MenuServiceImpl implements IMenuService {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public OutVO list() {
-        Object dtoList = RedisUtil.get(MENU_KEY);
-        if (null == dtoList) {
-            RedisUtil.set(MENU_KEY, dtoList = toTree(DTO.ofPO(menuDAO.list(), MenuDTO::new)));
+        List<MenuPO> poList = (List<MenuPO>) RedisUtil.get(MENU_KEY);
+        if (null == poList) {
+            RedisUtil.set(MENU_KEY, poList = menuDAO.list());
         }
-        return OutVO.success(dtoList);
+        return OutVO.success(toTree(DTO.ofPO(poList, MenuDTO::new)));
     }
 
     private List<MenuDTO> toTree(List<MenuDTO> dtoList) {

@@ -30,7 +30,7 @@ public class ParseUtil {
 	 * 为 空 返回 0
 	 */
 	public static Integer integer(Object obj) {
-		return obj == null ? 0 : Integer.valueOf(obj.toString());
+		return obj == null ? 0 : Integer.parseInt(obj.toString());
 	}
 
 
