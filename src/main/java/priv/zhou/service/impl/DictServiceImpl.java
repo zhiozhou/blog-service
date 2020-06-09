@@ -32,12 +32,12 @@ public class DictServiceImpl implements IDictService {
     }
 
     @Override
-    public OutVO dataList(DictDataDTO dictDataDTO) {
+    public OutVO<List<DictDataDTO>> dataList(DictDataDTO dictDataDTO) {
         return OutVO.success(DTO.ofPO(listData(dictDataDTO), DictDataDTO::new));
     }
 
     @Override
-    public OutVO dataMap(DictDataDTO dictDataDTO) {
+    public OutVO<Map<String, DictDataDTO>> dataMap(DictDataDTO dictDataDTO) {
         List<DictDataPO> poList = listData(dictDataDTO);
         Map<String, DictDataDTO> map = new LinkedHashMap<>();
         for (DictDataPO po : poList) {

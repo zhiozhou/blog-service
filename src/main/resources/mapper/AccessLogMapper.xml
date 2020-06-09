@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.zhou.domain.dao.AccessLogDAO">
+
+    <insert id="save" parameterType="AccessLogPO">
+        INSERT INTO zhousb_access_log(
+             visitor_id , 
+             host ,
+             mfrs,
+             device,
+             os , 
+             browser , 
+             api , 
+             param ,
+             user_agent ,
+             gmt_create
+        )
+        VALUES(
+            #{visitorId} , 
+            #{host} , 
+            #{mfrs} ,
+            #{device} ,
+            #{os} ,
+            #{browser} , 
+            #{api} ,
+            #{param} ,
+            #{userAgent} ,
+            NOW()
+        )
+    </insert>
+</mapper>

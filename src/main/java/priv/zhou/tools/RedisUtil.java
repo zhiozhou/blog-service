@@ -1,7 +1,11 @@
 package priv.zhou.tools;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.data.redis.support.atomic.RedisAtomicLong;
 
@@ -16,10 +20,16 @@ import java.util.concurrent.TimeUnit;
 public class RedisUtil {
 
     @SuppressWarnings("unchecked")
-    private static RedisTemplate<String, Object> redisTemplate = AppContextUtil.getBean("redisTemplate", RedisTemplate.class);
+    private final static RedisTemplate<String, Object> redisTemplate = AppContextUtil.getBean("redisTemplate", RedisTemplate.class);
 
     static {
         redisTemplate.setKeySerializer(new StringRedisSerializer());
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
+        jackson2JsonRedisSerializer.setObjectMapper(objectMapper);
+        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
     }
 
     private RedisUtil() {
@@ -173,7 +183,7 @@ public class RedisUtil {
     /**
      * 添加元素
      */
-    public static void addList(String key, String... values) {
+    public static void addList(String key, Object... values) {
         redisTemplate.opsForList().rightPushAll(key, values);
     }
 
@@ -195,7 +205,7 @@ public class RedisUtil {
     /**
      * 添加set
      */
-    public static void addSet(String key, String... values) {
+    public static void addSet(String key, Object... values) {
         redisTemplate.opsForSet().add(key, values);
     }
 
@@ -216,7 +226,7 @@ public class RedisUtil {
     /**
      * Set中移除values
      */
-    public static void removeSet(String key, String... values) {
+    public static void removeSet(String key, Object... values) {
         redisTemplate.opsForSet().remove(key, values);
     }
 
@@ -224,7 +234,7 @@ public class RedisUtil {
     /**
      * ZSet中移除values
      */
-    public static void removeZSet(String key, String... values) {
+    public static void removeZSet(String key, Object... values) {
         redisTemplate.opsForZSet().remove(key, values);
     }
 

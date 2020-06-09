@@ -3,6 +3,9 @@ package priv.zhou.service;
 import priv.zhou.domain.dto.DictDataDTO;
 import priv.zhou.domain.vo.OutVO;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 字典 服务层定义
  *
@@ -11,8 +14,8 @@ import priv.zhou.domain.vo.OutVO;
  */
 public interface IDictService {
 
-    OutVO dataList(DictDataDTO dictDataDTO);
+    OutVO<List<DictDataDTO>>  dataList(DictDataDTO dictDataDTO);
 
-    OutVO dataMap(DictDataDTO dictDataDTO);
+    OutVO<Map<String, DictDataDTO>> dataMap(DictDataDTO dictDataDTO);
 
 }

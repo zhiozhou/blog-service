@@ -1,12 +1,14 @@
 package priv.zhou.web;
 
-import org.springframework.web.bind.annotation.PathVariable;
+import lombok.extern.java.Log;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.domain.Page;
 import priv.zhou.domain.dto.BlogDTO;
 import priv.zhou.domain.dto.BlogTypeDTO;
+import priv.zhou.domain.vo.ListVO;
 import priv.zhou.domain.vo.OutVO;
+import priv.zhou.interfaces.AccessLog;
 import priv.zhou.service.IBlogService;
 
 import javax.validation.Valid;
@@ -28,19 +30,22 @@ public class BlogController {
         this.blogService = blogService;
     }
 
+
+    @AccessLog
     @RequestMapping("/get")
-    public OutVO get(BlogDTO blogDTO) {
+    public OutVO<BlogDTO> get(BlogDTO blogDTO) {
         return blogService.get(blogDTO);
     }
 
+
     @RequestMapping("/type/get")
-    public OutVO getType(@Valid  BlogTypeDTO blogTypeDTO) {
+    public OutVO<BlogTypeDTO> getType(@Valid BlogTypeDTO blogTypeDTO) {
         return blogService.getType(blogTypeDTO);
     }
 
 
     @RequestMapping("/list")
-    public OutVO list(BlogDTO blogDTO, Page page) {
+    public OutVO<ListVO<BlogDTO>> list(BlogDTO blogDTO, Page page) {
         return blogService.list(blogDTO, page);
     }
 }

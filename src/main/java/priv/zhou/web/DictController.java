@@ -7,6 +7,8 @@ import priv.zhou.domain.vo.OutVO;
 import priv.zhou.service.IDictService;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -26,12 +28,12 @@ public class DictController {
     }
 
     @RequestMapping("/dataList")
-    public OutVO dataList(@Valid DictDataDTO dictDataDTO) {
+    public OutVO<List<DictDataDTO>> dataList(@Valid DictDataDTO dictDataDTO) {
         return dictService.dataList(dictDataDTO);
     }
 
     @RequestMapping("/dataMap")
-    public OutVO dataMap(@Valid DictDataDTO dictDataDTO) {
+    public OutVO<Map<String, DictDataDTO>> dataMap(@Valid DictDataDTO dictDataDTO) {
         return dictService.dataMap(dictDataDTO);
     }
 

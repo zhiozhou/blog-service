@@ -5,8 +5,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import lombok.extern.slf4j.Slf4j;
+import priv.zhou.params.NULL;
 import priv.zhou.params.OutVOEnum;
+
+import java.util.List;
 
 /**
  * Created by Andy on 2016/11/9.
@@ -15,9 +17,7 @@ import priv.zhou.params.OutVOEnum;
 @Getter
 @Setter
 @Accessors(chain = true)
-@Slf4j
-public class OutVO {
-
+public class OutVO<T> {
 
     /**
      * 系统状态
@@ -30,7 +30,7 @@ public class OutVO {
     /**
      * 返回数据
      */
-    private Object data;
+    private T data;
 
 
     public OutVO() {
@@ -66,25 +66,29 @@ public class OutVO {
     /**
      * 返回api错误
      */
-    public static OutVO fail(OutVOEnum outVoEnum) {
-        return new OutVO(outVoEnum);
+    public static <E> OutVO<E> fail(OutVOEnum outVoEnum) {
+        return new OutVO<>(outVoEnum);
     }
 
 
     /**
      * 返回api成功
      */
-    public static OutVO success() {
-        return new OutVO(OutVOEnum.SUCCESS);
+    public static OutVO<NULL> success() {
+        return new OutVO<>(OutVOEnum.SUCCESS);
     }
 
 
     /**
      * 返回api成功
      */
-    public static OutVO success(Object data) {
-        return new OutVO(OutVOEnum.SUCCESS).setData(data);
+    public static <T> OutVO<T> success(T data) {
+        return new OutVO<T>(OutVOEnum.SUCCESS).setData(data);
     }
 
+
+    public static <T> OutVO<ListVO<T>> list(List<T> list, boolean hasMore) {
+        return success(new ListVO<T>().setList(list).setHasMore(hasMore));
+    }
 
 }

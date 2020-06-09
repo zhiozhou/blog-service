@@ -2,47 +2,52 @@ package priv.zhou.params;
 
 /**
  * 全局返回Code枚举类
- * @author  zhou
+ *
+ * @author zhou
  * @since 2019.03.11
  */
 public enum OutVOEnum {
 
-	SUCCESS("0000", "请求成功"),
+    SUCCESS("0000", "请求成功"),
 
-	EMPTY_PARAM("0001", "参数为空"),
+    EMPTY_PARAM("0001", "参数为空"),
 
-	FAIL_PARAM("0002", "参数错误"),
+    FAIL_PARAM("0002", "参数错误"),
 
-	NOT_FOUND("0004", "数据不存在"),
+    FAIL_OPERATION("0003", "操作失败"),
 
-	ILLEGAL_VISIT("9000", "非法访问"),
+    NOT_FOUND("0004", "数据不存在"),
 
-	LATER_RETRY("9001", "请稍后重试"),
+    NEED_INIT("0100", "需要初始化"),
 
-	OFTEN_OPERATION("9002", "操作频繁"),
+    LATER_RETRY("9001", "请稍后重试"),
 
-	ERROR_SYSTEM("9999", "系统异常");
+    OFTEN_OPERATION("9002", "操作频繁"),
+
+    ACCESS_BLOCK("9003", "禁止访问"),
+
+    ERROR_SYSTEM("9999", "系统异常");
 
 
-	OutVOEnum(String code, String info) {
-		this.code = code;
-		this.info = info;
-	}
+    OutVOEnum(String code, String info) {
+        this.code = code;
+        this.info = info;
+    }
 
-	/**
-	 * 异常编码
-	 */
-	private final String code;
-	/**
-	 * 异常信息
-	 */
-	private final String info;
+    /**
+     * 异常编码
+     */
+    private final String code;
+    /**
+     * 异常信息
+     */
+    private final String info;
 
-	public String getCode() {
-		return code;
-	}
+    public String getCode() {
+        return code;
+    }
 
-	public String getInfo() {
-		return info;
-	}
+    public String getInfo() {
+        return info;
+    }
 }

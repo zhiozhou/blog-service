@@ -11,6 +11,7 @@ import priv.zhou.params.AppProperties;
 import priv.zhou.params.OutVOEnum;
 import priv.zhou.tools.EmailUtil;
 import priv.zhou.tools.HttpUtil;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
@@ -63,7 +64,7 @@ public class GlobalHandler {
     @ExceptionHandler(BindException.class)
     public void bindHand(HttpServletRequest request, HttpServletResponse response, BindException e) throws Exception {
         List<ObjectError> errs = e.getBindingResult().getAllErrors();
-        OutVO outVO = OutVO.fail(OutVOEnum.FAIL_PARAM).setInfo(errs.get(0).getDefaultMessage());
+        OutVO<?> outVO = OutVO.fail(OutVOEnum.FAIL_PARAM).setInfo(errs.get(0).getDefaultMessage());
         log.info("退出 {} 接口,返回报文 -->{}\n", request.getRequestURI(), outVO);
         HttpUtil.out(response, outVO);
     }

@@ -34,7 +34,7 @@ public class MenuServiceImpl implements IMenuService {
 
     @Override
     @SuppressWarnings("unchecked")
-    public OutVO list() {
+    public OutVO<List<MenuDTO>> list() {
         List<MenuPO> poList = (List<MenuPO>) RedisUtil.get(MENU_KEY);
         if (null == poList && null != (poList = menuDAO.list())) {
             RedisUtil.set(MENU_KEY, poList);

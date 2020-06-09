@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.zhou.domain.dao.VisitorDAO">
+
+    <insert id="save" parameterType="VisitorPO">
+        INSERT INTO zhousb_visitor(
+             nickname , 
+             email , 
+             website , 
+             state , 
+             notify ,
+             last_access_time , 
+             gmt_create , 
+             gmt_modified 
+        )
+        VALUES(
+            #{nickname} , 
+            #{email} , 
+            #{website} , 
+            #{state} , 
+            #{notify} ,
+            NOW(),
+            NOW(),
+            NOW()
+        )
+    </insert>
+
+    <update id="update" parameterType="VisitorPO">
+        UPDATE zhousb_visitor
+        <set>
+            <if test="lastAccessTime != null and lastAccessTime != ''">last_access_time = #{lastAccessTime},</if>
+            gmt_modified = NOW()
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <sql id="selectSQL">
+        SELECT
+            id ,
+            nickname ,
+            email ,
+            website ,
+            state ,
+            notify ,
+        FROM zhousb_visitor
+    </sql>
+
+    <select id="get" parameterType="VisitorDTO" resultType="VisitorPO">
+        SELECT
+            id ,
+            nickname ,
+            email ,
+            website ,
+            state ,
+            notify ,
+        FROM
+            zhousb_visitor
+        WHERE
+            id = #{id}
+    </select>
+</mapper>

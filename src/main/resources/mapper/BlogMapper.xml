@@ -61,7 +61,8 @@
         <where>
             zhousb_blog.state = 0
             <if test="id != null">and zhousb_blog.id = #{id} </if>
-            <if test="type != null and type.key != null">and zhousb_blog_type.state = 7 and zhousb_blog.type = #{type.key}</if>
+            <if test="type != null and type.key != null">and zhousb_blog.type = #{type.key}</if>
+            <if test="type != null and type.state != null">and zhousb_blog_type.state = #{type.state}</if>
         </where>
     </select>
 

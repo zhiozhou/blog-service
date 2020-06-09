@@ -1,6 +1,5 @@
 package priv.zhou.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +12,7 @@ import priv.zhou.domain.dto.BlogTypeDTO;
 import priv.zhou.domain.dto.DTO;
 import priv.zhou.domain.po.BlogPO;
 import priv.zhou.domain.po.BlogTypePO;
+import priv.zhou.domain.vo.ListVO;
 import priv.zhou.domain.vo.OutVO;
 import priv.zhou.params.OutVOEnum;
 import priv.zhou.service.IBlogService;
@@ -44,12 +44,14 @@ public class BlogServiceImpl implements IBlogService {
     }
 
     @Override
-    public OutVO get(BlogDTO blogDTO) {
+    public OutVO<BlogDTO> get(BlogDTO blogDTO) {
 
-        // 可按 id || 单文章key 来获取
-        String poKey = null != blogDTO.getId() ? BLOG_KEY + blogDTO.getId() :
-                null != blogDTO.getType() && StringUtils.isBlank(blogDTO.getType().getKey()) ?
-                        BLOG_KEY + blogDTO.getType() : null;
+        // 可按 id || 单文章类型的 key 来获取
+        String poKey = null == blogDTO.getId()
+                ? null != blogDTO.getType() && StringUtils.isBlank(blogDTO.getType().setState(SINGLE_BLOG_STATE).getKey()) ? BLOG_KEY + blogDTO.getType() : null
+                : BLOG_KEY + blogDTO.getId();
+
+
         if (null == poKey) {
             return OutVO.fail(OutVOEnum.EMPTY_PARAM);
         }
@@ -84,7 +86,7 @@ public class BlogServiceImpl implements IBlogService {
 
 
     @Override
-    public OutVO getType(BlogTypeDTO blogTypeDTO) {
+    public OutVO<BlogTypeDTO> getType(BlogTypeDTO blogTypeDTO) {
         String typeKye = BLOG_TYPE_KEY + blogTypeDTO.getKey();
         BlogTypePO blogTypePO = (BlogTypePO) RedisUtil.get(typeKye);
         if (null == blogTypePO) {
@@ -98,7 +100,7 @@ public class BlogServiceImpl implements IBlogService {
 
 
     @Override
-    public OutVO list(BlogDTO blogDTO, Page page) {
+    public OutVO<ListVO<BlogDTO>> list(BlogDTO blogDTO, Page page) {
         PageHelper.startPage(page.getPage(), page.getLimit(), page.isCount());
         List<BlogPO> poList = blogDAO.list(blogDTO);
         PageInfo<BlogPO> pageInfo = new PageInfo<>(poList);
@@ -106,9 +108,6 @@ public class BlogServiceImpl implements IBlogService {
         if (totalPage % page.getLimit() != 0) {
             totalPage += 1;
         }
-        JSONObject data = new JSONObject();
-        data.put("list", DTO.ofPO(poList, BlogDTO::new));
-        data.put("hasMore", page.getPage() < totalPage);
-        return OutVO.success(data);
+        return OutVO.list(DTO.ofPO(poList, BlogDTO::new), page.getPage() < totalPage);
     }
 }
