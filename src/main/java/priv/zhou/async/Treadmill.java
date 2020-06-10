@@ -30,7 +30,7 @@ public class Treadmill {
                 .setOs(operatingSystem.getName())
                 .setBrowser(userAgent.getBrowser().getName());
         if (accessLogDAO.save(accessLogPO) < 1) {
-            log.error("日志记录失败");
+            log.error("访问日志记录失败");
         }
     }
 

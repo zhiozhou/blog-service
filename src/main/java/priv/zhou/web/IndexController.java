@@ -2,7 +2,6 @@ package priv.zhou.web;
 
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.domain.dto.DictDataDTO;
 import priv.zhou.domain.dto.MenuDTO;
