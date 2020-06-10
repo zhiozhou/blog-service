@@ -39,13 +39,15 @@ public class GlobalHandler {
     @SuppressWarnings("all")
     @ExceptionHandler(value = Exception.class)
     public void globalHand(HttpServletRequest request, HttpServletResponse response, Exception e) throws Exception {
-        StringBuilder builder = new StringBuilder("");
-        builder.append("未知异常: request -->").append(request.getRequestURI()).append(" | ");
-        builder.append("请求参数 -->").append(HttpUtil.getParams(request)).append(" | ");
-        builder.append("e -->");
+        StringBuilder builder = new StringBuilder("未知异常: request -->")
+                .append(request.getRequestURI()).append(" | ")
+                .append("请求参数 -->").append(HttpUtil.getParams(request)).append(" | ")
+                .append("e -->");
         log.error(builder.toString(), e);
         HttpUtil.out(response, OutVO.fail(OutVOEnum.ERROR_SYSTEM));
-        EmailUtil.send(appProperties.getAdminEmail(), appProperties.getName() + " 出现未知异常", getStackTrace(e));
+        if (appProperties.isEmail()) {
+            EmailUtil.send(appProperties.getAdminEmail(), appProperties.getName() + " 出现未知异常", getStackTrace(e));
+        }
     }
 
 
@@ -62,7 +64,7 @@ public class GlobalHandler {
      * 验证异常
      */
     @ExceptionHandler(BindException.class)
-    public void bindHand(HttpServletRequest request, HttpServletResponse response, BindException e) throws Exception {
+    public void bindHand(HttpServletRequest request, HttpServletResponse response, BindException e) {
         List<ObjectError> errs = e.getBindingResult().getAllErrors();
         OutVO<?> outVO = OutVO.fail(OutVOEnum.FAIL_PARAM).setInfo(errs.get(0).getDefaultMessage());
         log.info("退出 {} 接口,返回报文 -->{}\n", request.getRequestURI(), outVO);
@@ -73,7 +75,7 @@ public class GlobalHandler {
      * 全局错误异常
      */
     @ExceptionHandler(GlobalException.class)
-    public void globalFailHand(HttpServletRequest request, HttpServletResponse response, GlobalException e) throws Exception {
+    public void globalFailHand(HttpServletRequest request, HttpServletResponse response, GlobalException e) {
         log.info("退出 {} 接口,返回报文 -->{}\n", request.getRequestURI(), e.getOutVO());
         HttpUtil.out(response, e.getOutVO());
     }

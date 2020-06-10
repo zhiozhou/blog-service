@@ -13,9 +13,11 @@ import priv.zhou.tools.RedisUtil;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static priv.zhou.params.CONSTANT.MENU_KEY;
+import static priv.zhou.params.CONSTANT.MENU_MODIFIED_KEY;
 
 /**
  * 菜单 服务层实现
@@ -41,6 +43,16 @@ public class MenuServiceImpl implements IMenuService {
         }
         return OutVO.success(toTree(DTO.ofPO(poList, MenuDTO::new)));
     }
+
+    @Override
+    public Long latestVersion() {
+        Long value = (Long) RedisUtil.get(MENU_MODIFIED_KEY);
+        if (null == value) {
+            RedisUtil.set(MENU_MODIFIED_KEY, value = menuDAO.sumModifiedStamp(), 30, TimeUnit.MINUTES);
+        }
+        return value;
+    }
+
 
     private List<MenuDTO> toTree(List<MenuDTO> dtoList) {
         if (dtoList.isEmpty()) {

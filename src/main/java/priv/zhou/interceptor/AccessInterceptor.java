@@ -24,7 +24,7 @@ public class AccessInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         if (!TokenUtil.verify(request.getParameter("token"))) {
-            HttpUtil.out(response, OutVO.fail(OutVOEnum.NOT_INIT));
+            HttpUtil.out(response, OutVO.fail(OutVOEnum.NEED_INIT));
             return false;
         }
         return true;

@@ -31,6 +31,7 @@ logging:
 app:
   enc: UTF-8
   name: ${spring.application.name}
+  email: false
   access-limit: 200
   admin-email: flyingnoob@qq.com
 --- # --------------------------------------------- 正式环境 -------------------------------------------------------
@@ -79,6 +80,7 @@ logging:
 app:
   enc: UTF-8
   name: ${spring.application.name}
+  email: true
   access-limit: 200
   admin-email: flyingnoob@qq.com
 

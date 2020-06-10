@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="priv.zhou.domain.dao.VisitorDAO">
 
-    <insert id="save" parameterType="VisitorPO">
+    <insert id="save" parameterType="VisitorPO" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO zhousb_visitor(
              nickname , 
              email , 
@@ -36,17 +36,6 @@
         WHERE id = #{id}
     </update>
 
-    <sql id="selectSQL">
-        SELECT
-            id ,
-            nickname ,
-            email ,
-            website ,
-            state ,
-            notify ,
-        FROM zhousb_visitor
-    </sql>
-
     <select id="get" parameterType="VisitorDTO" resultType="VisitorPO">
         SELECT
             id ,
@@ -54,7 +43,7 @@
             email ,
             website ,
             state ,
-            notify ,
+            notify
         FROM
             zhousb_visitor
         WHERE

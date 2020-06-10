@@ -13,6 +13,8 @@ import priv.zhou.params.NULL;
  */
 public interface IVisitorService {
 
+    OutVO<VisitorDTO> create();
+
     OutVO<NULL> update(VisitorDTO visitorDTO);
 
     OutVO<VisitorDTO> get(String token) throws Exception;

@@ -16,8 +16,10 @@ import java.util.List;
  */
 @Mapper
 @Component
-public interface DictDataDAO {
+public interface DictDAO {
 
-    List<DictDataPO> list(DictDataDTO dictDataDTO);
+    List<DictDataPO> listData(DictDataDTO dictDataDTO);
+
+    Long getModifiedStamp(String key);
 
 }

@@ -20,6 +20,8 @@ public class AppProperties {
 
 	private Integer accessLimit;
 
+	private boolean email;
+
 	private String adminEmail;
 
 	private Integer cacheSecond = 60 * 60 * 24 * 30 * 12; //缓存一年

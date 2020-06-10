@@ -15,4 +15,5 @@ public interface IMenuService {
 
     OutVO<List<MenuDTO>> list();
 
+    Long latestVersion();
 }

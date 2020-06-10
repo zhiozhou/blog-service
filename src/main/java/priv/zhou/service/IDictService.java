@@ -14,8 +14,10 @@ import java.util.Map;
  */
 public interface IDictService {
 
-    OutVO<List<DictDataDTO>>  dataList(DictDataDTO dictDataDTO);
+    OutVO<List<DictDataDTO>> dataList(DictDataDTO dictDataDTO);
 
     OutVO<Map<String, DictDataDTO>> dataMap(DictDataDTO dictDataDTO);
+
+    Long latestVersion(String dictKey);
 
 }

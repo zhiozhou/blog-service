@@ -13,6 +13,22 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public class TokenUtil {
 
+    /**
+     * 游客id
+     */
+    public final static String VISITOR_ID = "visitorId";
+
+    /**
+     * 菜单版本
+     */
+    public final static String MENU_VERSION = "menuVersion";
+
+    /**
+     * sns版本
+     */
+    public final static String SNS_VERSION = "snsVersion";
+
+
     public static String build(Map<String, Object> claims) {
         return Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS256, getKey()).compact();
     }
@@ -29,12 +45,12 @@ public class TokenUtil {
         }
     }
 
-    public static Integer parseId(String jwt) throws Exception {
+    public static Integer parseId(String jwt) {
         Map<String, Object> map = parse(jwt);
         if (!verify(map)) {
             return null;
         }
-        return (Integer) map.get("id");
+        return (Integer) map.get(VISITOR_ID);
     }
 
     public static boolean verify(String jwt) {
@@ -43,12 +59,16 @@ public class TokenUtil {
     }
 
     public static boolean verify(Map<String, Object> tokenMap) {
-        return null != tokenMap && !tokenMap.isEmpty() && null != tokenMap.get("id") && null != tokenMap.get("version");
+        return null != tokenMap
+                && !tokenMap.isEmpty()
+                && null != tokenMap.get(VISITOR_ID)
+                && null != tokenMap.get(MENU_VERSION)
+                && null != tokenMap.get(SNS_VERSION);
     }
 
 
     private static Key getKey() {
-        return new SecretKeySpec(DatatypeConverter.parseBase64Binary("zhousb"), SignatureAlgorithm.HS256.getJcaName());
+        return new SecretKeySpec(DatatypeConverter.parseBase64Binary("zhousb-blog"), SignatureAlgorithm.HS256.getJcaName());
     }
 
 

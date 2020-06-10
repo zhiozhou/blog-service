@@ -48,7 +48,7 @@ public class WebConfigurer implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(interceptor).
                 addPathPatterns("/**/**").
-                excludePathPatterns("/blog/init"); // 这些不会拦截
+                excludePathPatterns("/init"); // 这些不会拦截
     }
 
 

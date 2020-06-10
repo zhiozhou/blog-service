@@ -18,4 +18,6 @@ import java.util.List;
 public interface MenuDAO {
 
     List<MenuPO> list();
+
+    Long sumModifiedStamp();
 }

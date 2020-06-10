@@ -2,7 +2,7 @@ package priv.zhou.service.impl;
 
 
 import org.springframework.stereotype.Service;
-import priv.zhou.domain.dao.DictDataDAO;
+import priv.zhou.domain.dao.DictDAO;
 import priv.zhou.domain.dto.DTO;
 import priv.zhou.domain.dto.DictDataDTO;
 import priv.zhou.domain.po.DictDataPO;
@@ -13,8 +13,10 @@ import priv.zhou.tools.RedisUtil;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static priv.zhou.params.CONSTANT.DICT_DATA_KEY;
+import static priv.zhou.params.CONSTANT.DICT_DATA_MODIFIED_KEY;
 
 /**
  * 菜单 服务层实现
@@ -25,10 +27,10 @@ import static priv.zhou.params.CONSTANT.DICT_DATA_KEY;
 @Service
 public class DictServiceImpl implements IDictService {
 
-    private final DictDataDAO dictDataDAO;
+    private final DictDAO dictDAO;
 
-    public DictServiceImpl(DictDataDAO dictDataDAO) {
-        this.dictDataDAO = dictDataDAO;
+    public DictServiceImpl(DictDAO dictDAO) {
+        this.dictDAO = dictDAO;
     }
 
     @Override
@@ -46,11 +48,20 @@ public class DictServiceImpl implements IDictService {
         return OutVO.success(map);
     }
 
+    @Override
+    public Long latestVersion(String key) {
+        Long value = (Long) RedisUtil.get(DICT_DATA_MODIFIED_KEY);
+        if (null == value) {
+            RedisUtil.set(DICT_DATA_MODIFIED_KEY, value = dictDAO.getModifiedStamp(key), 30, TimeUnit.MINUTES);
+        }
+        return value;
+    }
+
     @SuppressWarnings("unchecked")
     private List<DictDataPO> listData(DictDataDTO dictDataDTO) {
         String key = DICT_DATA_KEY + dictDataDTO.getDictKey();
         List<DictDataPO> poList = (List<DictDataPO>) RedisUtil.get(key);
-        if (null == poList && null != (poList = dictDataDAO.list(dictDataDTO))) {
+        if (null == poList && null != (poList = dictDAO.listData(dictDataDTO))) {
             RedisUtil.set(DICT_DATA_KEY, poList);
         }
         return poList;

@@ -31,6 +31,16 @@ public class VisitorServiceImpl implements IVisitorService {
     }
 
     @Override
+    public OutVO<VisitorDTO> create() {
+        VisitorPO visitorPO = new VisitorPO()
+                .setState(0)
+                .setNotify(0);
+        return visitorDAO.save(visitorPO) > 0 ?
+                OutVO.success(DTO.ofPO(visitorPO, VisitorDTO::new)) :
+                OutVO.fail(OutVOEnum.FAIL_OPERATION);
+    }
+
+    @Override
     public OutVO<NULL> update(VisitorDTO visitorDTO) {
         VisitorPO visitorPO = visitorDTO.toPO();
         return visitorDAO.update(visitorPO) > 0 ?
