@@ -31,7 +31,6 @@ logging:
 app:
   enc: UTF-8
   name: ${spring.application.name}
-  host: 192.168.1.80
   email: false
   access-limit: 200
   admin-email: flyingnoob@qq.com

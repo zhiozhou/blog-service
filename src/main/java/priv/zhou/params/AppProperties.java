@@ -20,8 +20,6 @@ public class AppProperties {
 
     private String name;
 
-    private String host;
-
     private boolean email;
 
     private String adminEmail;

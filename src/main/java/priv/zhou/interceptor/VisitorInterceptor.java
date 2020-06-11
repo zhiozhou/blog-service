@@ -48,9 +48,17 @@ public class VisitorInterceptor implements HandlerInterceptor {
             tokenMap.put(VISITOR_ID, createVO.getData().getId());
             tokenMap.put(MENU_VERSION, 0);
             tokenMap.put(SNS_VERSION, 0);
-            request.setAttribute(TOKEN_KEY, tokenMap);
-            CookieUtil.save(TOKEN_KEY, TokenUtil.build(tokenMap), response);
+
+            token = TokenUtil.build(tokenMap);
+            request.setAttribute(TOKEN_KEY, token);
+
+            // 方便 next 服务器可复制响应头
+            response.addHeader("Access-Control-Expose-Headers","Set-Cookie");
+            CookieUtil.save(TOKEN_KEY, token, response);
+
         }
+        request.setAttribute("mmmmm", token);
+        response.addHeader("Access-Control-Expose-Headers","mmmmm");
         return true;
     }
 }

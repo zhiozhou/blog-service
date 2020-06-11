@@ -17,8 +17,6 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("unused")
 public class CookieUtil {
 
-    private final static AppProperties appProperties = AppContextUtil.getBean(AppProperties.class);
-
     public static String get(String name, HttpServletRequest request) {
         return get(name, request.getCookies());
 
@@ -56,7 +54,6 @@ public class CookieUtil {
         }
         cookie.setPath("/");
         cookie.setMaxAge(maxAge < Integer.MAX_VALUE ? maxAge.intValue() : Integer.MAX_VALUE);
-        cookie.setDomain(appProperties.getHost());
         response.addCookie(cookie);
     }
 
