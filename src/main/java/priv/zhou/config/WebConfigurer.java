@@ -1,15 +1,15 @@
 package priv.zhou.config;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import priv.zhou.interceptor.AccessInterceptor;
-import priv.zhou.interfaces.VisitorResolver;
+import priv.zhou.interceptor.VisitorInterceptor;
+import priv.zhou.resolver.VisitorResolver;
 import priv.zhou.tools.AppContextUtil;
 
 import java.util.List;
@@ -22,10 +22,10 @@ import java.util.List;
 @Configuration
 public class WebConfigurer implements WebMvcConfigurer {
 
-    private final AccessInterceptor interceptor;
+    private final VisitorInterceptor visitorInterceptor;
 
-    public WebConfigurer(AccessInterceptor interceptor) {
-        this.interceptor = interceptor;
+    public WebConfigurer(VisitorInterceptor visitorInterceptor) {
+        this.visitorInterceptor = visitorInterceptor;
     }
 
     /**
@@ -57,9 +57,13 @@ public class WebConfigurer implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(interceptor).
-                addPathPatterns("/**/**").
-                excludePathPatterns("/init"); // 这些不会拦截
+
+        // todo: 之后根据需求拦截部分地址即可
+
+
+        registry.addInterceptor(visitorInterceptor)
+                .addPathPatterns("/**/**");
+
     }
 
 

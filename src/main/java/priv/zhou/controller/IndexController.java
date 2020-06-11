@@ -1,4 +1,4 @@
-package priv.zhou.web;
+package priv.zhou.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.web.bind.annotation.PostMapping;

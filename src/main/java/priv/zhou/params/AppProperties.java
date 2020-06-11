@@ -5,6 +5,8 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author Andy
  */
@@ -14,20 +16,22 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "app")
 public class AppProperties {
 
-	public static String ENC;
+    public static String ENC;
 
-	private String name;
+    private String name;
 
-	private Integer accessLimit;
+    private String host;
 
-	private boolean email;
+    private boolean email;
 
-	private String adminEmail;
+    private String adminEmail;
 
-	private Integer cacheSecond = 60 * 60 * 24 * 30 * 12; //缓存一年
+    private Integer accessLimit;
 
-	public void setEnc(String enc) {
-		ENC = enc;
-	}
+    private Integer cacheSecond = ((Long) TimeUnit.DAYS.toSeconds(365L)).intValue();
+
+    public void setEnc(String enc) {
+        ENC = enc;
+    }
 }
 

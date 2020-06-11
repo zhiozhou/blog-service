@@ -9,23 +9,16 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import priv.zhou.async.Treadmill;
 import priv.zhou.domain.dto.AccessLogDTO;
-import priv.zhou.domain.vo.OutVO;
-import priv.zhou.exception.GlobalException;
-import priv.zhou.params.OutVOEnum;
-import priv.zhou.tools.*;
+import priv.zhou.tools.HttpUtil;
+import priv.zhou.tools.TokenUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static priv.zhou.params.CONSTANT.DEFAULT_FILL;
-import static priv.zhou.params.CONSTANT.REPEAT_KEY;
-
 
 /**
- * 校验&日志aop
+ * 日志的切面组件
  *
  * @author zhou
  * @since 2019.11.14
@@ -34,18 +27,17 @@ import static priv.zhou.params.CONSTANT.REPEAT_KEY;
 @Aspect
 @Component
 @DependsOn("treadmill")
-public class WebAspect {
+public class LogAspect extends BaseAspect {
 
     private final Treadmill treadmill;
 
-    public WebAspect(Treadmill treadmill) {
+    public LogAspect(Treadmill treadmill) {
         this.treadmill = treadmill;
     }
 
-    @Pointcut("execution(public * priv.zhou.web.*.*(..))")
+    @Pointcut("execution(public * priv.zhou.controller.*.*(..))")
     public void webCut() {
     }
-
 
     /**
      * 请求日志
@@ -66,11 +58,12 @@ public class WebAspect {
         log.info("退出 {} 接口,返回报文 -->{}\n", getRequest().getRequestURI(), JSON.toJSONString(result));
     }
 
+
     /**
      * 记录访问日志
      */
     @Order(3)
-    @Before(value = "@annotation(priv.zhou.interfaces.AccessLog)")
+    @Before(value = "@annotation(priv.zhou.annotation.AccessLog)")
     public void accessLog() throws Exception {
         HttpServletRequest request = getRequest();
         AccessLogDTO accessLogDTO = new AccessLogDTO()
@@ -80,38 +73,6 @@ public class WebAspect {
                 .setApi(request.getRequestURI())
                 .setParam(HttpUtil.getParams(request));
         treadmill.accessLog(accessLogDTO);
-    }
-
-    /**
-     * 重复提交检查
-     */
-    @Order(4)
-    @Before(value = "@annotation(priv.zhou.interfaces.CheckRepeat)")
-    public void checkRepeat() throws Exception {
-        HttpServletRequest request = getRequest();
-        String paramStr = JSON.toJSONString(request.getParameterMap()),
-                key = REPEAT_KEY + request.getRequestURI() + paramStr;
-        try (DistributedLock lock = RedisLock.build(key)) {
-            if (!lock.acquire()) {
-                throw new GlobalException(OutVO.fail(OutVOEnum.LATER_RETRY));
-            } else if (null != RedisUtil.get(key)) {
-                throw new GlobalException(OutVO.fail(OutVOEnum.OFTEN_OPERATION));
-            }
-            RedisUtil.set(key, DEFAULT_FILL, 5);
-        }
-    }
-
-
-    /**
-     * 获取请求
-     */
-    private HttpServletRequest getRequest() throws Exception {
-        // 1.获取请求
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if (attributes == null) {
-            throw new Exception("attributes 为空");
-        }
-        return attributes.getRequest();
     }
 
 }

@@ -10,13 +10,17 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 
 /**
- * 启用异步线程池
+ * 配置异步执行
  */
 @EnableAsync
 @Configuration
 public class AsyncConfig {
 
 
+    /**
+     * 异步线程池配置
+     * @return
+     */
     @Bean
     public Executor executor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();

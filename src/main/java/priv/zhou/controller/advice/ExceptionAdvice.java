@@ -1,4 +1,4 @@
-package priv.zhou.exception;
+package priv.zhou.controller.advice;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
@@ -7,6 +7,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import priv.zhou.domain.vo.OutVO;
+import priv.zhou.exception.GlobalException;
 import priv.zhou.params.AppProperties;
 import priv.zhou.params.OutVOEnum;
 import priv.zhou.tools.EmailUtil;
@@ -20,16 +21,18 @@ import java.io.PrintWriter;
 import java.util.List;
 
 /**
+ * controller 异常控制
+ *
  * @author zhou
  * @since 2020.03.04
  */
 @Slf4j
 @ControllerAdvice
-public class GlobalHandler {
+public class ExceptionAdvice {
 
     private final AppProperties appProperties;
 
-    public GlobalHandler(AppProperties appProperties) {
+    public ExceptionAdvice(AppProperties appProperties) {
         this.appProperties = appProperties;
     }
 
@@ -52,7 +55,7 @@ public class GlobalHandler {
 
 
     /**
-     * 不支持此请求方法异常
+     * 请求方法异常
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public void NotSupportedHand() {
@@ -79,6 +82,7 @@ public class GlobalHandler {
         log.info("退出 {} 接口,返回报文 -->{}\n", request.getRequestURI(), e.getOutVO());
         HttpUtil.out(response, e.getOutVO());
     }
+
 
 
     private String getStackTrace(Throwable e) {

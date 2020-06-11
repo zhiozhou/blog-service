@@ -1,6 +1,5 @@
-package priv.zhou.web;
+package priv.zhou.controller;
 
-import lombok.extern.java.Log;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.domain.Page;
@@ -8,7 +7,7 @@ import priv.zhou.domain.dto.BlogDTO;
 import priv.zhou.domain.dto.BlogTypeDTO;
 import priv.zhou.domain.vo.ListVO;
 import priv.zhou.domain.vo.OutVO;
-import priv.zhou.interfaces.AccessLog;
+import priv.zhou.annotation.AccessLog;
 import priv.zhou.service.IBlogService;
 
 import javax.validation.Valid;
