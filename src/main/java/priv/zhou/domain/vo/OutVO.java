@@ -32,7 +32,6 @@ public class OutVO<T> {
      */
     private T data;
 
-
     public OutVO() {
     }
 
@@ -49,7 +48,7 @@ public class OutVO<T> {
     /**
      * 设置枚举信息
      */
-    private void setEnum(OutVOEnum outVoEnum) {
+    public void setEnum(OutVOEnum outVoEnum) {
         this.code = outVoEnum.getCode();
         this.info = outVoEnum.getInfo();
     }

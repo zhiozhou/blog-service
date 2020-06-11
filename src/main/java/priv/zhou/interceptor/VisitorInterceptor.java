@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
+import static priv.zhou.params.CONSTANT.TOKEN_KEY;
 import static priv.zhou.tools.TokenUtil.*;
 
 
@@ -35,7 +36,7 @@ public class VisitorInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        String token = CookieUtil.get("token", request);
+        String token = CookieUtil.get(TOKEN_KEY, request);
         Map<String, Object> tokenMap = TokenUtil.parse(token);
         if (!TokenUtil.verify(tokenMap)) {
             tokenMap = new HashMap<>();
@@ -47,7 +48,8 @@ public class VisitorInterceptor implements HandlerInterceptor {
             tokenMap.put(VISITOR_ID, createVO.getData().getId());
             tokenMap.put(MENU_VERSION, 0);
             tokenMap.put(SNS_VERSION, 0);
-            CookieUtil.save("token", TokenUtil.build(tokenMap), response);
+            request.setAttribute(TOKEN_KEY, tokenMap);
+            CookieUtil.save(TOKEN_KEY, TokenUtil.build(tokenMap), response);
         }
         return true;
     }

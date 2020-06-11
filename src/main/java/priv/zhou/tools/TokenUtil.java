@@ -60,7 +60,6 @@ public class TokenUtil {
 
     public static boolean verify(Map<String, Object> tokenMap) {
         return null != tokenMap
-                && !tokenMap.isEmpty()
                 && null != tokenMap.get(VISITOR_ID)
                 && null != tokenMap.get(MENU_VERSION)
                 && null != tokenMap.get(SNS_VERSION);

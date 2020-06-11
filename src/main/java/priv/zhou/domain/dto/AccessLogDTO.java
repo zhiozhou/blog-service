@@ -23,7 +23,7 @@ public class AccessLogDTO extends DTO<AccessLogPO> {
     /**
      * 访客id
      */
-    private Integer visitorId;
+    private String token;
 
     /**
      * 主机
@@ -44,14 +44,4 @@ public class AccessLogDTO extends DTO<AccessLogPO> {
      * 用户代理
      */
     private String userAgent;
-
-    @Override
-    public AccessLogPO toPO() {
-        AccessLogPO po = super.toPO();
-        param.remove("token");
-        if (!param.isEmpty()) {
-            po.setParam(param.toJSONString());
-        }
-        return po;
-    }
 }

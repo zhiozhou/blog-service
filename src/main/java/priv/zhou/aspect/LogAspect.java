@@ -11,10 +11,12 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import priv.zhou.async.Treadmill;
 import priv.zhou.domain.dto.AccessLogDTO;
+import priv.zhou.tools.CookieUtil;
 import priv.zhou.tools.HttpUtil;
-import priv.zhou.tools.TokenUtil;
 
 import javax.servlet.http.HttpServletRequest;
+
+import static priv.zhou.params.CONSTANT.TOKEN_KEY;
 
 
 /**
@@ -66,8 +68,12 @@ public class LogAspect extends BaseAspect {
     @Before(value = "@annotation(priv.zhou.annotation.AccessLog)")
     public void accessLog() throws Exception {
         HttpServletRequest request = getRequest();
+        String token = CookieUtil.get(TOKEN_KEY, request);
+        if (null == token) {
+            token = (String) request.getAttribute(TOKEN_KEY);
+        }
         AccessLogDTO accessLogDTO = new AccessLogDTO()
-                .setVisitorId(TokenUtil.parseId(request.getParameter("token")))
+                .setToken(token)
                 .setHost(HttpUtil.getIpAddress(request))
                 .setUserAgent(HttpUtil.getUserAgent(request))
                 .setApi(request.getRequestURI())

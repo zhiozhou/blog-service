@@ -5,15 +5,16 @@ import eu.bitwalker.useragentutils.UserAgent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import priv.zhou.config.AsyncConfig;
 import priv.zhou.domain.dao.AccessLogDAO;
 import priv.zhou.domain.dto.AccessLogDTO;
 import priv.zhou.domain.po.AccessLogPO;
-import priv.zhou.config.AsyncConfig;
+import priv.zhou.tools.TokenUtil;
 
 
 /**
  * 跑步机
- *
+ * <p>
  * 用于处理各种异步动作
  *
  * @see AsyncConfig
@@ -33,6 +34,7 @@ public class Treadmill {
         UserAgent userAgent = UserAgent.parseUserAgentString(accessLogDTO.getUserAgent());
         OperatingSystem operatingSystem = userAgent.getOperatingSystem();
         AccessLogPO accessLogPO = accessLogDTO.toPO()
+                .setVisitorId(TokenUtil.parseId(accessLogDTO.getToken()))
                 .setMfrs(operatingSystem.getManufacturer().toString())
                 .setDevice(operatingSystem.getDeviceType().toString())
                 .setOs(operatingSystem.getName())

@@ -20,7 +20,11 @@ public class CookieUtil {
     private final static AppProperties appProperties = AppContextUtil.getBean(AppProperties.class);
 
     public static String get(String name, HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
+        return get(name, request.getCookies());
+
+    }
+
+    public static String get(String name, Cookie[] cookies) {
         if (null == cookies || 0 == cookies.length) {
             return null;
         }

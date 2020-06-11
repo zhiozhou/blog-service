@@ -4,10 +4,8 @@ import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import priv.zhou.async.Treadmill;
 import priv.zhou.domain.vo.OutVO;
 import priv.zhou.exception.GlobalException;
 import priv.zhou.params.OutVOEnum;
@@ -22,7 +20,6 @@ import static priv.zhou.params.CONSTANT.REPEAT_KEY;
 
 
 /**
- *
  * 检查请求的切面组件
  *
  * @author zhou

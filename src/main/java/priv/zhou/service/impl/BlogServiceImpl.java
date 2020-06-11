@@ -71,7 +71,7 @@ public class BlogServiceImpl implements IBlogService {
             RedisUtil.set(poKey, blogPO);
         }
 
-        // TODO: 部署多体改为Reids同步
+        // TODO: 部署多体改为 Reids 同步
         synchronized (BLOG_PV_KEY) {
             String pvKey = blogPO.getId().toString();
             Long pv = (Long) RedisUtil.getHash(BLOG_PV_KEY, pvKey);

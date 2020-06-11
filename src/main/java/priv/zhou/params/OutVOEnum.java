@@ -18,7 +18,9 @@ public enum OutVOEnum {
 
     NOT_FOUND("0004", "数据不存在"),
 
-    NEED_INIT("0100", "需要初始化"),
+    NEED_INIT("0100", "尚未初始化"),
+
+    VERSION_DEPRECATED("0101", "版本过时"),
 
     LATER_RETRY("9001", "请稍后重试"),
 

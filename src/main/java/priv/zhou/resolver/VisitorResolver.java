@@ -15,6 +15,8 @@ import priv.zhou.service.IVisitorService;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static priv.zhou.params.CONSTANT.TOKEN_KEY;
+
 /**
  * 解析用户
  *
@@ -42,7 +44,7 @@ public class VisitorResolver implements HandlerMethodArgumentResolver {
         if (null == request) {
             throw new Exception("request 为空");
         }
-        OutVO<VisitorDTO> outVO = visitorService.get(request.getParameter("token"));
+        OutVO<VisitorDTO> outVO = visitorService.get(request.getParameter(TOKEN_KEY));
         if (outVO.isFail()) {
             throw new GlobalException(outVO);
         }

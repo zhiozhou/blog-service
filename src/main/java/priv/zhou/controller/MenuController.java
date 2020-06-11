@@ -5,8 +5,16 @@ import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.domain.dto.MenuDTO;
 import priv.zhou.domain.vo.OutVO;
 import priv.zhou.service.IMenuService;
+import priv.zhou.tools.CookieUtil;
+import priv.zhou.tools.TokenUtil;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
+
+import static priv.zhou.params.CONSTANT.TOKEN_KEY;
+import static priv.zhou.tools.TokenUtil.MENU_VERSION;
 
 
 /**
@@ -26,7 +34,14 @@ public class MenuController {
     }
 
     @RequestMapping("/list")
-    public OutVO<List<MenuDTO>> list() {
-        return menuService.list();
+    public OutVO<List<MenuDTO>> list(HttpServletRequest request, HttpServletResponse response) {
+        OutVO<List<MenuDTO>> outVO = menuService.list();
+        Map<String, Object> tokenMap = TokenUtil.parse(CookieUtil.get(TOKEN_KEY, request));
+        if (outVO.isFail() || null == tokenMap) {
+            return outVO;
+        }
+        tokenMap.put(MENU_VERSION, menuService.latestVersion());
+        CookieUtil.save(TOKEN_KEY, TokenUtil.build(tokenMap), response);
+        return outVO;
     }
 }
