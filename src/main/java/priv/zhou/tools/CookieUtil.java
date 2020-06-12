@@ -2,6 +2,7 @@ package priv.zhou.tools;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.tomcat.util.http.Rfc6265CookieProcessor;
 import priv.zhou.params.AppProperties;
 
 import javax.servlet.http.Cookie;
@@ -17,9 +18,10 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("unused")
 public class CookieUtil {
 
+    private final static Rfc6265CookieProcessor cookieProcessor = new Rfc6265CookieProcessor();
+
     public static String get(String name, HttpServletRequest request) {
         return get(name, request.getCookies());
-
     }
 
     public static String get(String name, Cookie[] cookies) {
@@ -37,15 +39,13 @@ public class CookieUtil {
             }
         }
         return null;
-
     }
 
-    public static void save(String name, String value, HttpServletResponse response) {
-        save(name, value, TimeUnit.DAYS.toSeconds(3650L), response);
+    public static Cookie create(String name, String value) {
+        return create(name, value, TimeUnit.DAYS.toSeconds(3650L));
     }
 
-
-    public static void save(String name, String value, Long maxAge, HttpServletResponse response) {
+    public static Cookie create(String name, String value, Long maxAge) {
         Cookie cookie;
         try {
             cookie = new Cookie(name, URLEncoder.encode(value, AppProperties.ENC));
@@ -54,7 +54,12 @@ public class CookieUtil {
         }
         cookie.setPath("/");
         cookie.setMaxAge(maxAge < Integer.MAX_VALUE ? maxAge.intValue() : Integer.MAX_VALUE);
-        response.addCookie(cookie);
+        return cookie;
+    }
+
+
+    public static void save(String name, String value, Long maxAge, HttpServletResponse response) {
+        response.addCookie(create(name, value, maxAge));
     }
 
     public static void remove(String name, HttpServletResponse response) {
@@ -64,4 +69,9 @@ public class CookieUtil {
             log.error("移除cookie异常: e -->{1}", e);
         }
     }
+
+    public static String toHeader(Cookie cookie) {
+        return cookieProcessor.generateHeader(cookie);
+    }
+
 }

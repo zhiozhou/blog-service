@@ -41,7 +41,7 @@ public class DictController {
             return outVO;
         }
         tokenMap.put(SNS_VERSION, dictService.latestVersion(snsKey));
-        CookieUtil.save(TOKEN_KEY, TokenUtil.build(tokenMap), response);
+        response.addCookie(CookieUtil.create(TOKEN_KEY, TokenUtil.build(tokenMap)));
         return outVO;
 
     }

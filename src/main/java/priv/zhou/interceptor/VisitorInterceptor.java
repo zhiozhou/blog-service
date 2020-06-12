@@ -7,8 +7,10 @@ import priv.zhou.domain.vo.OutVO;
 import priv.zhou.service.IVisitorService;
 import priv.zhou.tools.CookieUtil;
 import priv.zhou.tools.HttpUtil;
+import priv.zhou.tools.ParseUtil;
 import priv.zhou.tools.TokenUtil;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
@@ -49,16 +51,17 @@ public class VisitorInterceptor implements HandlerInterceptor {
             tokenMap.put(MENU_VERSION, 0);
             tokenMap.put(SNS_VERSION, 0);
 
-            token = TokenUtil.build(tokenMap);
-            request.setAttribute(TOKEN_KEY, token);
+            // 方便记录日志
+            request.setAttribute(TOKEN_KEY, token = TokenUtil.build(tokenMap));
 
-            // 方便 next 服务器可复制响应头
-            response.addHeader("Access-Control-Expose-Headers","Set-Cookie");
-            CookieUtil.save(TOKEN_KEY, token, response);
-
+            Cookie cookie = CookieUtil.create(TOKEN_KEY, token);
+            if (ParseUtil.bool(request.getParameter("ssr"))) {
+                // token暴露给服务器端
+                response.addHeader(TOKEN_KEY, CookieUtil.toHeader(cookie));
+            } else {
+                response.addCookie(cookie);
+            }
         }
-        request.setAttribute("mmmmm", token);
-        response.addHeader("Access-Control-Expose-Headers","mmmmm");
         return true;
     }
 }

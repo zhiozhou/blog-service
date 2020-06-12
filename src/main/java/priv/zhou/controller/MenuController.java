@@ -41,7 +41,7 @@ public class MenuController {
             return outVO;
         }
         tokenMap.put(MENU_VERSION, menuService.latestVersion());
-        CookieUtil.save(TOKEN_KEY, TokenUtil.build(tokenMap), response);
+        response.addCookie(CookieUtil.create(TOKEN_KEY, TokenUtil.build(tokenMap)));
         return outVO;
     }
 }

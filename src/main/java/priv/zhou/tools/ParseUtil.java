@@ -41,6 +41,14 @@ public class ParseUtil {
         return obj != null ? obj instanceof Long ? (Long) obj : Long.parseLong(obj.toString()) : 0;
     }
 
+    /**
+     * 解析bool
+     * 为 空 返回 0
+     */
+    public static Boolean bool(Object obj) {
+        return obj != null && (obj instanceof Boolean ? (Boolean) obj : Boolean.parseBoolean(obj.toString()));
+    }
+
 
     /**
      * 解析BigDecimal
