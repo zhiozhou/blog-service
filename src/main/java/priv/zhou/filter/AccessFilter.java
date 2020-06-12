@@ -28,8 +28,6 @@ public class AccessFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-
-        System.out.println(HttpUtil.getUserAgent(request));
         String ip = HttpUtil.getIpAddress(request);
         if (RedisUtil.isMemberSet(ACCESS_BLOCK_KEY, ip)) {
             HttpUtil.out(response, OutVO.fail(OutVOEnum.ACCESS_BLOCK));

@@ -59,6 +59,10 @@ public class CookieUtil {
     }
 
 
+    public static void save(String name, String value, HttpServletResponse response) {
+        response.addCookie(create(name, value));
+    }
+
     public static void save(String name, String value, Long maxAge, HttpServletResponse response) {
         response.addCookie(create(name, value, maxAge));
     }

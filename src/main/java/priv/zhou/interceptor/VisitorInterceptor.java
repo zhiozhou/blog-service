@@ -1,9 +1,13 @@
 package priv.zhou.interceptor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+import priv.zhou.controller.DictController;
 import priv.zhou.domain.dto.VisitorDTO;
 import priv.zhou.domain.vo.OutVO;
+import priv.zhou.service.IDictService;
+import priv.zhou.service.IMenuService;
 import priv.zhou.service.IVisitorService;
 import priv.zhou.tools.CookieUtil;
 import priv.zhou.tools.HttpUtil;
@@ -28,12 +32,19 @@ import static priv.zhou.tools.TokenUtil.*;
  * @author zhou
  * @since 2020.6.9
  */
+@Slf4j
 @Component
 public class VisitorInterceptor implements HandlerInterceptor {
 
+    private final IMenuService menuService;
+
+    private final IDictService dictService;
+
     private final IVisitorService visitorService;
 
-    public VisitorInterceptor(IVisitorService visitorService) {
+    public VisitorInterceptor(IMenuService menuService, IDictService dictService, IVisitorService visitorService) {
+        this.menuService = menuService;
+        this.dictService = dictService;
         this.visitorService = visitorService;
     }
 
@@ -49,12 +60,11 @@ public class VisitorInterceptor implements HandlerInterceptor {
                 return false;
             }
             tokenMap.put(VISITOR_ID, createVO.getData().getId());
-            tokenMap.put(MENU_VERSION, 0);
-            tokenMap.put(SNS_VERSION, 0);
+            tokenMap.put(MENU_VERSION, menuService.latestVersion());
+            tokenMap.put(SNS_VERSION, dictService.latestVersion(DictController.SNS_KEY));
 
-            // 方便记录日志
+            // 此次请求如果需要可以在attribute中取
             request.setAttribute(TOKEN_KEY, token = TokenUtil.build(tokenMap));
-
             Cookie cookie = CookieUtil.create(TOKEN_KEY, token);
             if (ParseUtil.bool(request.getHeader(SSR_HEADER_KEY))) {
                 // token暴露给服务器端

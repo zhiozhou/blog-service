@@ -10,8 +10,6 @@ public interface CONSTANT {
 
     String SSR_HEADER_KEY = "zhousb-server-side";
 
-    String SNS_DICT_KEY = "zhou_sns";
-
 
     /***********************************************************  REDIS KEYS  ***********************************************************/
 

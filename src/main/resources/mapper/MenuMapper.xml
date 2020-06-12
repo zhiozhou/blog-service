@@ -32,7 +32,7 @@
 	        SUM(UNIX_TIMESTAMP( gmt_modified ))
         FROM
             system_menu
-        WHERE system_menu.state = 0 and flag = 1
+        WHERE system_menu.state = 0 and flag = 2
     </select>
 
 

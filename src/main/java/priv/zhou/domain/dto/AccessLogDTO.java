@@ -44,4 +44,13 @@ public class AccessLogDTO extends DTO<AccessLogPO> {
      * 用户代理
      */
     private String userAgent;
+
+    @Override
+    public AccessLogPO toPO() {
+        AccessLogPO po = super.toPO();
+        if(null != param && !param.isEmpty()){
+            po.setParam(param.toJSONString());
+        }
+        return po;
+    }
 }

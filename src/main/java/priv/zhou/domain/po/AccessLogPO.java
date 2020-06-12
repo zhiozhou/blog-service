@@ -80,4 +80,7 @@ public class AccessLogPO implements Serializable{
 	public String toString() {
 		return JSON.toJSONString(this);
 	}
+
+
+
 }

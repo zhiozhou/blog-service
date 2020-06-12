@@ -18,6 +18,4 @@ public class ListVO<DTO> {
 	private List<DTO> list;
 
 	private boolean hasMore;
-
-
 }
