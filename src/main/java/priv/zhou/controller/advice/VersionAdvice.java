@@ -9,7 +9,7 @@ import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import priv.zhou.domain.vo.OutVO;
-import priv.zhou.params.OutVOEnum;
+import priv.zhou.misc.OutVOEnum;
 import priv.zhou.service.IDictService;
 import priv.zhou.service.IMenuService;
 import priv.zhou.tools.CookieUtil;
@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import static priv.zhou.params.CONSTANT.*;
+import static priv.zhou.misc.CONSTANT.*;
 import static priv.zhou.tools.TokenUtil.MENU_VERSION;
 import static priv.zhou.tools.TokenUtil.SNS_VERSION;
 

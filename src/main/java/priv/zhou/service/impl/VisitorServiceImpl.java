@@ -6,13 +6,13 @@ import priv.zhou.domain.dto.DTO;
 import priv.zhou.domain.dto.VisitorDTO;
 import priv.zhou.domain.po.VisitorPO;
 import priv.zhou.domain.vo.OutVO;
-import priv.zhou.params.NULL;
-import priv.zhou.params.OutVOEnum;
+import priv.zhou.misc.NULL;
+import priv.zhou.misc.OutVOEnum;
 import priv.zhou.service.IVisitorService;
 import priv.zhou.tools.RedisUtil;
 import priv.zhou.tools.TokenUtil;
 
-import static priv.zhou.params.CONSTANT.VISITOR_KEY;
+import static priv.zhou.misc.CONSTANT.VISITOR_KEY;
 
 
 /**

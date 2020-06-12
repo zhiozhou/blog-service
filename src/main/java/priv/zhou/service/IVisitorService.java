@@ -3,7 +3,7 @@ package priv.zhou.service;
 
 import priv.zhou.domain.dto.VisitorDTO;
 import priv.zhou.domain.vo.OutVO;
-import priv.zhou.params.NULL;
+import priv.zhou.misc.NULL;
 
 /**
  * 访客 服务层定义

@@ -3,7 +3,7 @@ package priv.zhou.tools;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.Rfc6265CookieProcessor;
-import priv.zhou.params.AppProperties;
+import priv.zhou.misc.AppProperties;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -53,6 +53,7 @@ public class CookieUtil {
             cookie = new Cookie(name, value);
         }
         cookie.setPath("/");
+        cookie.setHttpOnly(true);
         cookie.setMaxAge(maxAge < Integer.MAX_VALUE ? maxAge.intValue() : Integer.MAX_VALUE);
         return cookie;
     }

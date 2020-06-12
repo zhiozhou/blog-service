@@ -16,8 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
-import static priv.zhou.params.CONSTANT.SSR_HEADER_KEY;
-import static priv.zhou.params.CONSTANT.TOKEN_KEY;
+import static priv.zhou.misc.CONSTANT.SSR_HEADER_KEY;
+import static priv.zhou.misc.CONSTANT.TOKEN_KEY;
 import static priv.zhou.tools.TokenUtil.*;
 
 

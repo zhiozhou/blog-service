@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
-import static priv.zhou.params.CONSTANT.TOKEN_KEY;
+import static priv.zhou.misc.CONSTANT.TOKEN_KEY;
 import static priv.zhou.tools.TokenUtil.SNS_VERSION;
 
 

@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static priv.zhou.params.CONSTANT.DICT_DATA_KEY;
-import static priv.zhou.params.CONSTANT.DICT_DATA_MODIFIED_KEY;
+import static priv.zhou.misc.CONSTANT.DICT_DATA_KEY;
+import static priv.zhou.misc.CONSTANT.DICT_DATA_MODIFIED_KEY;
 
 /**
  * 菜单 服务层实现

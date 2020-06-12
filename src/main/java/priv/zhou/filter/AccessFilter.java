@@ -3,7 +3,7 @@ package priv.zhou.filter;
 
 import lombok.extern.slf4j.Slf4j;
 import priv.zhou.domain.vo.OutVO;
-import priv.zhou.params.OutVOEnum;
+import priv.zhou.misc.OutVOEnum;
 import priv.zhou.tools.HttpUtil;
 import priv.zhou.tools.RedisUtil;
 
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static priv.zhou.params.CONSTANT.ACCESS_BLOCK_KEY;
+import static priv.zhou.misc.CONSTANT.ACCESS_BLOCK_KEY;
 
 @Slf4j
 @WebFilter

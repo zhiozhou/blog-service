@@ -14,13 +14,13 @@ import priv.zhou.domain.po.BlogPO;
 import priv.zhou.domain.po.BlogTypePO;
 import priv.zhou.domain.vo.ListVO;
 import priv.zhou.domain.vo.OutVO;
-import priv.zhou.params.OutVOEnum;
+import priv.zhou.misc.OutVOEnum;
 import priv.zhou.service.IBlogService;
 import priv.zhou.tools.RedisUtil;
 
 import java.util.List;
 
-import static priv.zhou.params.CONSTANT.*;
+import static priv.zhou.misc.CONSTANT.*;
 
 
 /**

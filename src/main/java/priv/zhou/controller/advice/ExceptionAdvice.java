@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import priv.zhou.domain.vo.OutVO;
 import priv.zhou.exception.GlobalException;
-import priv.zhou.params.AppProperties;
-import priv.zhou.params.OutVOEnum;
+import priv.zhou.misc.AppProperties;
+import priv.zhou.misc.OutVOEnum;
 import priv.zhou.tools.EmailUtil;
 import priv.zhou.tools.HttpUtil;
 

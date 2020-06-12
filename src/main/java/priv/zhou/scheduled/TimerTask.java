@@ -11,7 +11,7 @@ import priv.zhou.tools.RedisUtil;
 
 import java.util.Map;
 
-import static priv.zhou.params.CONSTANT.BLOG_PV_KEY;
+import static priv.zhou.misc.CONSTANT.BLOG_PV_KEY;
 
 @Slf4j
 @Component

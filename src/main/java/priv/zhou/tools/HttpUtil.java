@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import priv.zhou.domain.vo.OutVO;
-import priv.zhou.params.AppProperties;
+import priv.zhou.misc.AppProperties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

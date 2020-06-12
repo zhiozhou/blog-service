@@ -16,8 +16,8 @@ import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static priv.zhou.params.CONSTANT.MENU_KEY;
-import static priv.zhou.params.CONSTANT.MENU_MODIFIED_KEY;
+import static priv.zhou.misc.CONSTANT.MENU_KEY;
+import static priv.zhou.misc.CONSTANT.MENU_MODIFIED_KEY;
 
 /**
  * 菜单 服务层实现

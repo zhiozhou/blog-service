@@ -1,4 +1,4 @@
-package priv.zhou.params;
+package priv.zhou.misc;
 
 import lombok.Getter;
 import lombok.Setter;

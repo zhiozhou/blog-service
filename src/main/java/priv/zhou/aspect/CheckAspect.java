@@ -8,15 +8,15 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import priv.zhou.domain.vo.OutVO;
 import priv.zhou.exception.GlobalException;
-import priv.zhou.params.OutVOEnum;
+import priv.zhou.misc.OutVOEnum;
 import priv.zhou.tools.DistributedLock;
 import priv.zhou.tools.RedisLock;
 import priv.zhou.tools.RedisUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static priv.zhou.params.CONSTANT.DEFAULT_FILL;
-import static priv.zhou.params.CONSTANT.REPEAT_KEY;
+import static priv.zhou.misc.CONSTANT.DEFAULT_FILL;
+import static priv.zhou.misc.CONSTANT.REPEAT_KEY;
 
 
 /**

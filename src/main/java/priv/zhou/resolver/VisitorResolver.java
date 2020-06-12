@@ -15,7 +15,7 @@ import priv.zhou.service.IVisitorService;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static priv.zhou.params.CONSTANT.TOKEN_KEY;
+import static priv.zhou.misc.CONSTANT.TOKEN_KEY;
 
 /**
  * 解析用户
