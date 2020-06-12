@@ -20,8 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import static priv.zhou.params.CONSTANT.SNS_DICT_KEY;
-import static priv.zhou.params.CONSTANT.TOKEN_KEY;
+import static priv.zhou.params.CONSTANT.*;
 import static priv.zhou.tools.TokenUtil.MENU_VERSION;
 import static priv.zhou.tools.TokenUtil.SNS_VERSION;
 
@@ -51,11 +50,13 @@ public class VersionAdvice implements ResponseBodyAdvice<OutVO<?>> {
     @Override
     public OutVO<?> beforeBodyWrite(OutVO<?> outVO, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest serverRequest, ServerHttpResponse serverResponse) {
         HttpServletRequest request = ((ServletServerHttpRequest) serverRequest).getServletRequest();
-        Long menuLatest = menuService.latestVersion(), snsLatest = dictService.latestVersion(SNS_DICT_KEY);
         Map<String, Object> tokenMap = TokenUtil.parse(CookieUtil.get(TOKEN_KEY, request));
-        if (null == outVO || outVO.isFail() || null == tokenMap) {
+
+        if (null == outVO || outVO.isFail() || null == tokenMap || ParseUtil.bool(request.getHeader(SSR_HEADER_KEY))) {
             return outVO;
-        } else if (menuLatest > ParseUtil.longer(tokenMap.get(MENU_VERSION)) || snsLatest > ParseUtil.longer(tokenMap.get(SNS_VERSION))) {
+        }
+        Long menuLatest = menuService.latestVersion(), snsLatest = dictService.latestVersion(SNS_DICT_KEY);
+        if (menuLatest > ParseUtil.longer(tokenMap.get(MENU_VERSION)) || snsLatest > ParseUtil.longer(tokenMap.get(SNS_VERSION))) {
             outVO.setEnum(OutVOEnum.VERSION_DEPRECATED);
         }
         return outVO;

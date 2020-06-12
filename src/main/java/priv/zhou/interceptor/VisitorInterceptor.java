@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
+import static priv.zhou.params.CONSTANT.SSR_HEADER_KEY;
 import static priv.zhou.params.CONSTANT.TOKEN_KEY;
 import static priv.zhou.tools.TokenUtil.*;
 
@@ -55,7 +56,7 @@ public class VisitorInterceptor implements HandlerInterceptor {
             request.setAttribute(TOKEN_KEY, token = TokenUtil.build(tokenMap));
 
             Cookie cookie = CookieUtil.create(TOKEN_KEY, token);
-            if (ParseUtil.bool(request.getParameter("ssr"))) {
+            if (ParseUtil.bool(request.getHeader(SSR_HEADER_KEY))) {
                 // token暴露给服务器端
                 response.addHeader(TOKEN_KEY, CookieUtil.toHeader(cookie));
             } else {

@@ -6,7 +6,9 @@ public interface CONSTANT {
 
     String DEFAULT_FILL = "0";
 
-    String TOKEN_KEY = "ZHOUSB_BLOG_TOKEN";
+    String TOKEN_KEY = "zhousb-blog-token";
+
+    String SSR_HEADER_KEY = "zhousb-server-side";
 
     String SNS_DICT_KEY = "zhou_sns";
 
