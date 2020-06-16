@@ -45,6 +45,11 @@ public class VisitorDTO extends DTO<VisitorPO> {
     private String website;
 
     /**
+     * 头像
+     */
+    private String avatar;
+
+    /**
      * 状态
      */
     private Integer state;

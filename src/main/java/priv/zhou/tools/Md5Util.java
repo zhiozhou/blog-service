@@ -3,26 +3,27 @@ package priv.zhou.tools;
 import java.security.MessageDigest;
 
 /**
+ *
  * @author zhou
  * @since 2019.03.11
  */
 public class Md5Util {
 
+	private final static String ALGORITHM = "MD5";
 
-	/**
-	 * MD5加密
-	 */
-	public static String encrypt(String data) throws Exception {
-		StringBuilder sb = new StringBuilder();
-		MessageDigest md5 = MessageDigest.getInstance("MD5");
-		byte[] bytes = md5.digest(data.getBytes());
-		for (byte b : bytes) {
-			int bt = b & 0xff;
-			if (bt < 16) {
-				sb.append(0);
-			}
-			sb.append(Integer.toHexString(bt));
+	public static String encrypt(String string) {
+		byte[] hash;
+		try {
+			hash = MessageDigest.getInstance(ALGORITHM).digest(string.getBytes());
+		} catch (Exception e) {
+			throw new RuntimeException("Huh, MD5 should be supported?", e);
 		}
-		return sb.toString();
+
+		StringBuilder hex = new StringBuilder(hash.length * 2);
+		for (byte b : hash) {
+			if ((b & 0xFF) < 0x10) hex.append("0");
+			hex.append(Integer.toHexString(b & 0xFF));
+		}
+		return hex.toString();
 	}
 }

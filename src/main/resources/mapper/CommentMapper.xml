@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.zhou.domain.dao.CommentDAO">
+
+    <insert id="save" parameterType="CommentPO">
+        INSERT INTO zhousb_comment(
+             blog_id , 
+             topic_id , 
+             replied_id , 
+             to_vid , 
+             from_vid , 
+             content , 
+             state , 
+             gmt_create , 
+             gmt_modified 
+        )
+        VALUES(
+            #{blogId} , 
+            #{topicId} , 
+            #{repliedId} , 
+            #{toVid} , 
+            #{fromVid} , 
+            #{content} , 
+            #{state} , 
+            #{gmtCreate} , 
+            #{gmtModified} 
+        )
+    </insert>
+
+    <resultMap id="commentMap" type="CommentPO">
+        <id column="id" property="id"/>
+        <result column="content" property="content"/>
+        <result column="reply_count" property="replyCount"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <association property="fromVisitor" javaType="VisitorPO">
+            <result column="topic_from_nickname" property="nickname"/>
+            <result column="topic_from_email" property="email"/>
+            <result column="topic_from_website" property="website"/>
+            <result column="topic_from_avatar" property="avatar"/>
+        </association>
+        <collection property="replyList"  ofType="CommentPO">
+            <id column="reply_id" property="id"/>
+            <result column="reply_content" property="content"/>
+            <result column="reply_replied_id" property="repliedId"/>
+            <result column="reply_gmt_create" property="gmtCreate"/>
+            <association property="toVisitor" javaType="VisitorPO">
+                <result column="reply_to_nickname" property="nickname"/>
+                <result column="reply_to_email" property="email"/>
+                <result column="reply_to_website" property="website"/>
+                <result column="reply_to_avatar" property="avatar"/>
+            </association>
+            <association property="fromVisitor" javaType="VisitorPO">
+                <result column="reply_from_nickname" property="nickname"/>
+                <result column="reply_from_email" property="email"/>
+                <result column="reply_from_website" property="website"/>
+                <result column="reply_from_avatar" property="avatar"/>
+            </association>
+        </collection>
+    </resultMap>
+
+    <select id="list" parameterType="CommentDTO" resultMap="commentMap">
+        SELECT
+            topic.*,
+            reply.*
+        FROM
+        (
+            SELECT
+                topic.id,
+                topic.content,
+                topic.gmt_create,
+                topic_from.nickname AS topic_from_nickname,
+                topic_from.email AS topic_from_email,
+                topic_from.website AS topic_from_website,
+                topic_from.avatar AS topic_from_avatar,
+                ( SELECT count( 0 ) FROM zhousb_comment WHERE topic_id = topic.id ) AS reply_count
+            FROM
+                zhousb_comment AS topic
+                LEFT JOIN zhousb_visitor AS topic_from ON topic.from_vid = topic_from.id
+            <where>
+                topic.topic_id IS NULL
+                AND topic.blog_id = #{dto.blogId}
+            </where>
+            LIMIT ${(page.page - 1) * page.limit}, #{page.limit}
+        ) topic
+        LEFT JOIN (
+            SELECT
+                reply1.`id` AS reply_id,
+                reply1.topic_id AS reply_topic_id,
+                reply1.replied_id AS reply_replied_id,
+                reply1.content AS reply_content,
+                reply1.gmt_create AS reply_gmt_create,
+                reply_to.nickname AS reply_to_nickname,
+                reply_to.email AS reply_to_email,
+                reply_to.website AS reply_to_website,
+                reply_to.avatar AS reply_to_avatar,
+                reply_from.nickname AS reply_from_nickname,
+                reply_from.email AS reply_from_email,
+                reply_from.website AS reply_from_website,
+                reply_from.avatar AS reply_from_avatar
+            FROM
+                zhousb_comment AS reply1
+                LEFT JOIN zhousb_visitor AS reply_from ON reply1.from_vid = reply_from.id
+                LEFT JOIN zhousb_visitor AS reply_to ON reply1.to_vid = reply_to.id AND reply1.replied_id IS NOT NULL
+            WHERE
+                3 > (
+                SELECT
+                    count( reply2.id )
+                FROM
+                    zhousb_comment AS reply2
+                WHERE
+                    reply1.topic_id = reply2.topic_id  AND reply1.id &gt; reply2.id
+                )
+        ) AS reply ON topic.id = reply.reply_topic_id
+    </select>
+
+
+    <select id="count" parameterType="CommentDTO" resultType="integer">
+        select
+            count(0)
+        from zhousb_comment
+        <where>
+            topic_id IS NULL AND blog_id = #{blogId}
+        </where>
+    </select>
+
+</mapper>

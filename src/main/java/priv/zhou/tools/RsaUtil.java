@@ -39,7 +39,7 @@ public class RsaUtil {
      * @param publicKey 公钥
      */
     public static String encode(String plainText, PublicKey publicKey) throws Exception {
-        Cipher cipher = Cipher.getInstance(SIGN_CIPHER);
+        Cipher cipher = Cipher.getInstance(CIPHER);
         cipher.init(Cipher.ENCRYPT_MODE, publicKey);
         return Base64Util.encode(cipher.doFinal(plainText.getBytes(UTF_8)));
     }
@@ -50,7 +50,7 @@ public class RsaUtil {
      * @param cipherText    RSA密文
      * @param privateKeyB64 私钥的Base64字符串
      */
-    public static String decrypt(String cipherText, String privateKeyB64) throws Exception {
+    public static String decode(String cipherText, String privateKeyB64) throws Exception {
         return decode(cipherText, getPrivateKey(privateKeyB64));
     }
 
@@ -63,7 +63,7 @@ public class RsaUtil {
      */
     public static String decode(String cipherText, PrivateKey privateKey) throws Exception {
         byte[] bytes = Base64Util.decode(cipherText);
-        Cipher cipher = Cipher.getInstance(SIGN_CIPHER);
+        Cipher cipher = Cipher.getInstance(CIPHER);
         cipher.init(Cipher.DECRYPT_MODE, privateKey);
         return new String(cipher.doFinal(bytes), UTF_8);
     }
@@ -122,9 +122,18 @@ public class RsaUtil {
      * 生成公私钥对
      */
     public static KeyPair generateKeyPair() throws Exception {
-        KeyPairGenerator generator = KeyPairGenerator.getInstance(SIGN_CIPHER);
+        KeyPairGenerator generator = KeyPairGenerator.getInstance(CIPHER);
         generator.initialize(2048, new SecureRandom());
+        KeyPair keyPair = generator.generateKeyPair();
+
+        System.out.println("公钥：" + Base64Util.encode(keyPair.getPublic().getEncoded()).replace("\r\n",""));
+        System.out.println("私钥：" + Base64Util.encode(keyPair.getPrivate().getEncoded()).replace("\r\n",""));
         return generator.generateKeyPair();
     }
+
+//    public static void main(String[] args) throws Exception{
+//        String cipherText = encode("嘛意思", RSA_PUBLIC_KEY);
+//        System.out.println(decode(cipherText,RSA_PRIVATE_KEY));
+//    }
 
 }

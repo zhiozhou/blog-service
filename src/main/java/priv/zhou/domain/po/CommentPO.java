@@ -7,18 +7,18 @@ import lombok.experimental.Accessors;
 import com.alibaba.fastjson.JSON;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
- * 访客 数据持久化模型
+ * 评论 数据持久化模型
  *
  * @author zhou
- * @since 2020.06.08
+ * @since 2020.06.16
  */
 @Getter
 @Setter
 @Accessors(chain = true)
-public class VisitorPO implements Serializable{
-
+public class CommentPO implements Serializable{
 
 	/**
 	 * 
@@ -26,44 +26,39 @@ public class VisitorPO implements Serializable{
 	private Integer id;
 
 	/**
-	 * 名称
+	 * 博客id
 	 */
-	private String nickname;
+	private Integer blogId;
 
 	/**
-	 * 邮箱
+	 * 主题id
 	 */
-	private String email;
+	private Integer topicId;
 
 	/**
-	 * 站点
+	 * 回复的id
 	 */
-	private String website;
+	private Integer repliedId;
 
 	/**
-	 * 头像
+	 * 目标访客
 	 */
-	private String avatar;
+	private VisitorPO toVisitor;
+
+	/**
+	 * 访客
+	 */
+	private VisitorPO fromVisitor;
+
+	/**
+	 * 内容
+	 */
+	private String content;
 
 	/**
 	 * 状态
 	 */
-	private Integer state;
-
-	/**
-	 * 通知
-	 */
-	private Integer notify;
-
-	/**
-	 * 备注
-	 */
-	private String remark;
-
-	/**
-	 * 最后访问时间
-	 */
-	private Date lastAccessTime;
+	private String state;
 
 	/**
 	 * 创建时间
@@ -74,6 +69,16 @@ public class VisitorPO implements Serializable{
 	 * 修改时间
 	 */
 	private Date gmtModified;
+
+	/**
+	 * 主题回复总数
+	 */
+	private Integer replyCount;
+
+	/**
+	 * 回复列表
+	 */
+	private List<CommentPO> replyList;
 
 	@Override
 	public String toString() {
