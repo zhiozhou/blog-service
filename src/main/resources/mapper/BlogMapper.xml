@@ -13,6 +13,7 @@
         <result column="remark" property="remark"/>
         <result column="pv" property="pv"/>
         <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
         <association property="type" javaType="BlogTypePO">
             <result column="type_key" property="key"/>
             <result column="type_name" property="name"/>
@@ -53,7 +54,8 @@
             content,
             zhousb_blog.remark,
             pv,
-            zhousb_blog.gmt_create
+            zhousb_blog.gmt_create,
+            zhousb_blog.gmt_modified
         FROM
             zhousb_blog
             LEFT JOIN zhousb_blog_type ON zhousb_blog.type = zhousb_blog_type.`key`
