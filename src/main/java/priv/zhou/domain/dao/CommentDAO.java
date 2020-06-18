@@ -20,8 +20,9 @@ import java.util.List;
 @Component
 public interface CommentDAO {
 
-
     List<CommentPO> list(@Param("dto") CommentDTO commentDTO, @Param("page") Page page);
+
+    List<CommentPO> listReply(@Param("dto") CommentDTO commentDTO, @Param("page") Page page);
 
     Integer count(CommentDTO commentDTO);
 }

@@ -25,6 +25,7 @@ mybatis:
   type-aliases-package: priv.zhou.domain
   configuration:
     map-underscore-to-camel-case: true
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 logging:
   path: logs/
 #活动参数设置

@@ -36,18 +36,28 @@ public class CommentServiceImpl implements ICommentService {
         if (null == commentDTO.getBlogId()) {
             return OutVO.fail(OutVOEnum.EMPTY_PARAM);
         }
-        boolean hasMore = false;
-        List<CommentPO> poList = null;
         Integer count = commentDAO.count(commentDTO);
-        if (0 != count) {
-            Integer totalPage = count / page.getLimit();
-            if (0 != count % page.getLimit()) {
-                totalPage += 1;
-            }
-            hasMore = page.getPage() < totalPage;
-            poList = commentDAO.list(commentDTO, page);
+        List<CommentPO> poList = 0 == count ? null : commentDAO.list(commentDTO, page);
+        return OutVO.list(DTO.ofPO(poList, CommentDTO::new), page.getPage() < getTotalPage(count, page.getLimit()));
+    }
+
+    @Override
+    public OutVO<ListVO<CommentDTO>> replyList(CommentDTO commentDTO, Page page) {
+        if (null == commentDTO.getTopicId()) {
+            return OutVO.fail(OutVOEnum.EMPTY_PARAM);
         }
-        return OutVO.list(DTO.ofPO(poList, CommentDTO::new), hasMore);
+        Integer count = commentDAO.count(commentDTO);
+        List<CommentPO> poList = 0 == count ? null : commentDAO.listReply(commentDTO, page);
+        return OutVO.list(DTO.ofPO(poList, CommentDTO::new), page.getPage() < getTotalPage(count, page.getLimit()));
+    }
+
+
+    private int getTotalPage(Integer count, Integer limit) {
+        if (0 == count) {
+            return 0;
+        }
+        int totalPage = count / limit;
+        return 0 != count % limit ? totalPage + 1 : totalPage;
     }
 
 }

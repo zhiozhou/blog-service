@@ -17,4 +17,6 @@ public interface ICommentService {
 
     OutVO<ListVO<CommentDTO>> list(CommentDTO commentDTO, Page page);
 
+    OutVO<ListVO<CommentDTO>> replyList(CommentDTO commentDTO, Page page);
+
 }

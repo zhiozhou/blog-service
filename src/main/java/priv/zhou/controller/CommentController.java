@@ -29,4 +29,9 @@ public class CommentController {
     public OutVO<ListVO<CommentDTO>> list(CommentDTO commentDTO, Page page) {
         return commentService.list(commentDTO, page);
     }
+
+    @RequestMapping("/reply/list")
+    public OutVO<ListVO<CommentDTO>> replyList(CommentDTO commentDTO, Page page) {
+        return commentService.replyList(commentDTO, page);
+    }
 }

@@ -22,7 +22,7 @@ public class TEST {
     @Test
     public void test() {
 
-        List<CommentPO> list = commentDAO.list(new CommentDTO().setBlogId(1),new Page().setPage(2).setLimit(2));
+        List<CommentPO> list = commentDAO.listReply(new CommentDTO().setTopicId(1),new Page().setPage(1).setLimit(2));
 
         System.out.println("");
     }
