@@ -20,6 +20,10 @@ import java.util.List;
 @Component
 public interface CommentDAO {
 
+    Integer save(CommentPO commentPO);
+
+    CommentPO get(CommentDTO commentDTO);
+
     List<CommentPO> list(@Param("dto") CommentDTO commentDTO, @Param("page") Page page);
 
     List<CommentPO> listReply(@Param("dto") CommentDTO commentDTO, @Param("page") Page page);

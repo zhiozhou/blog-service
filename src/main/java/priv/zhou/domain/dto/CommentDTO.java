@@ -8,6 +8,9 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import priv.zhou.domain.po.CommentPO;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +37,7 @@ public class CommentDTO extends DTO<CommentPO> {
     /**
      * 博客id
      */
+    @NotNull(message = "博客标识不可为空")
     private Integer blogId;
 
     /**
@@ -54,11 +58,13 @@ public class CommentDTO extends DTO<CommentPO> {
     /**
      * 访客
      */
+    @NotNull(message = "昵称不可为空")
     private VisitorDTO fromVisitor;
 
     /**
      * 内容
      */
+    @NotEmpty(message = "内容不可为空")
     private String content;
 
     /**

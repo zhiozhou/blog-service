@@ -2,10 +2,10 @@ package priv.zhou.service;
 
 import priv.zhou.domain.Page;
 import priv.zhou.domain.dto.CommentDTO;
+import priv.zhou.domain.dto.VisitorDTO;
 import priv.zhou.domain.vo.ListVO;
 import priv.zhou.domain.vo.OutVO;
-
-import java.util.List;
+import priv.zhou.misc.NULL;
 
 /**
  * 评论 服务层定义
@@ -15,8 +15,10 @@ import java.util.List;
  */
 public interface ICommentService {
 
-    OutVO<ListVO<CommentDTO>> list(CommentDTO commentDTO, Page page);
+    OutVO<NULL> save(VisitorDTO visitorDTO, CommentDTO commentDTO);
 
-    OutVO<ListVO<CommentDTO>> replyList(CommentDTO commentDTO, Page page);
+    OutVO<ListVO<CommentDTO>> list(VisitorDTO visitorDTO, CommentDTO commentDTO, Page page);
+
+    OutVO<ListVO<CommentDTO>> replyList(VisitorDTO visitorDTO, CommentDTO commentDTO, Page page);
 
 }

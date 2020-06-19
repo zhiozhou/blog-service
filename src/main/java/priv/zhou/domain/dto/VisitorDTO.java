@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import priv.zhou.domain.po.VisitorPO;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 

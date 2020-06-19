@@ -12,6 +12,7 @@ import priv.zhou.domain.dto.VisitorDTO;
 import priv.zhou.domain.vo.OutVO;
 import priv.zhou.exception.GlobalException;
 import priv.zhou.service.IVisitorService;
+import priv.zhou.tools.CookieUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -44,7 +45,7 @@ public class VisitorResolver implements HandlerMethodArgumentResolver {
         if (null == request) {
             throw new Exception("request 为空");
         }
-        OutVO<VisitorDTO> outVO = visitorService.get(request.getParameter(TOKEN_KEY));
+        OutVO<VisitorDTO> outVO = visitorService.get(CookieUtil.get(TOKEN_KEY, request));
         if (outVO.isFail()) {
             throw new GlobalException(outVO);
         }

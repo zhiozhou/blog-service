@@ -2,10 +2,13 @@ package priv.zhou.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import priv.zhou.annotation.CurrentVisitor;
 import priv.zhou.domain.Page;
 import priv.zhou.domain.dto.CommentDTO;
+import priv.zhou.domain.dto.VisitorDTO;
 import priv.zhou.domain.vo.ListVO;
 import priv.zhou.domain.vo.OutVO;
+import priv.zhou.misc.NULL;
 import priv.zhou.service.ICommentService;
 
 
@@ -25,13 +28,18 @@ public class CommentController {
         this.commentService = commentService;
     }
 
+    @RequestMapping("/save")
+    public OutVO<NULL> save(@CurrentVisitor VisitorDTO visitorDTO, CommentDTO commentDTO) {
+        return commentService.save(visitorDTO, commentDTO);
+    }
+
     @RequestMapping("/list")
-    public OutVO<ListVO<CommentDTO>> list(CommentDTO commentDTO, Page page) {
-        return commentService.list(commentDTO, page);
+    public OutVO<ListVO<CommentDTO>> list(@CurrentVisitor VisitorDTO visitorDTO, CommentDTO commentDTO, Page page) {
+        return commentService.list(visitorDTO, commentDTO, page);
     }
 
     @RequestMapping("/reply/list")
-    public OutVO<ListVO<CommentDTO>> replyList(CommentDTO commentDTO, Page page) {
-        return commentService.replyList(commentDTO, page);
+    public OutVO<ListVO<CommentDTO>> replyList(@CurrentVisitor VisitorDTO visitorDTO, CommentDTO commentDTO, Page page) {
+        return commentService.replyList(visitorDTO, commentDTO, page);
     }
 }

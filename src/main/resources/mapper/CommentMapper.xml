@@ -6,12 +6,14 @@
 
     <resultMap id="commentMap" type="CommentPO">
         <id column="id" property="id"/>
-        <result column="content" property="content"/>
+        <result column="blog_id" property="blogId"/>
+        <result column="topic_id" property="topicId"/>
+        <result column="state" property="state"/>
         <result column="reply_count" property="replyCount"/>
         <result column="gmt_create" property="gmtCreate"/>
         <association property="fromVisitor" javaType="VisitorPO">
+            <id column="topic_from_id" property="id"/>
             <result column="topic_from_nickname" property="nickname"/>
-            <result column="topic_from_email" property="email"/>
             <result column="topic_from_website" property="website"/>
             <result column="topic_from_avatar" property="avatar"/>
         </association>
@@ -25,13 +27,9 @@
         <result column="reply_gmt_create" property="gmtCreate"/>
         <association property="toVisitor" javaType="VisitorPO">
             <result column="reply_to_nickname" property="nickname"/>
-            <result column="reply_to_email" property="email"/>
-            <result column="reply_to_website" property="website"/>
-            <result column="reply_to_avatar" property="avatar"/>
         </association>
         <association property="fromVisitor" javaType="VisitorPO">
             <result column="reply_from_nickname" property="nickname"/>
-            <result column="reply_from_email" property="email"/>
             <result column="reply_from_website" property="website"/>
             <result column="reply_from_avatar" property="avatar"/>
         </association>
@@ -45,11 +43,7 @@
             reply1.content AS reply_content,
             reply1.gmt_create AS reply_gmt_create,
             reply_to.nickname AS reply_to_nickname,
-            reply_to.email AS reply_to_email,
-            reply_to.website AS reply_to_website,
-            reply_to.avatar AS reply_to_avatar,
             reply_from.nickname AS reply_from_nickname,
-            reply_from.email AS reply_from_email,
             reply_from.website AS reply_from_website,
             reply_from.avatar AS reply_from_avatar
         FROM
@@ -86,6 +80,18 @@
     </insert>
 
 
+    <select id="get" parameterType="CommentDTO" resultMap="commentMap">
+        SELECT
+            blog_id,
+            topic_id,
+            state,
+            from_vid AS topic_from_id
+        FROM
+            zhousb_comment
+        WHERE
+            id = #{id}
+    </select>
+
     <select id="list"  resultMap="commentMap">
         SELECT
             topic.*,
@@ -97,7 +103,6 @@
                 topic.content,
                 topic.gmt_create,
                 topic_from.nickname AS topic_from_nickname,
-                topic_from.email AS topic_from_email,
                 topic_from.website AS topic_from_website,
                 topic_from.avatar AS topic_from_avatar,
                 ( SELECT count( 0 ) FROM zhousb_comment WHERE topic_id = topic.id ) AS reply_count
@@ -106,6 +111,7 @@
                 LEFT JOIN zhousb_visitor AS topic_from ON topic.from_vid = topic_from.id
             <where>
                 topic.topic_id IS NULL
+                AND (topic.state = 1 or topic.from_vid = #{dto.fromVisitor.id})
                 AND topic.blog_id = #{dto.blogId}
             </where>
             LIMIT ${(page.page - 1) * page.limit}, #{page.limit}
@@ -113,13 +119,14 @@
         LEFT JOIN (
             <include refid="selectReply"/>
             WHERE
-                3 > (
-                SELECT
-                    count( reply2.id )
-                FROM
-                    zhousb_comment AS reply2
-                WHERE
-                    reply1.topic_id = reply2.topic_id  AND reply1.id &gt; reply2.id
+                (reply1.state = 1 or reply1.from_vid = #{dto.fromVisitor.id})
+                AND 3 > (
+                    SELECT
+                        count( reply2.id )
+                    FROM
+                        zhousb_comment AS reply2
+                    WHERE
+                        reply1.topic_id = reply2.topic_id  AND reply1.id &gt; reply2.id
                 )
         ) AS reply ON topic.id = reply.reply_topic_id
     </select>
@@ -129,6 +136,7 @@
         <include refid="selectReply"/>
         <where>
             reply1.topic_id = #{dto.topicId}
+            AND (reply1.state = 1 or reply1.from_vid = #{dto.fromVisitor.id})
         </where>
         LIMIT ${(page.page - 1) * page.limit + 3}, #{page.limit}
     </select>
@@ -139,6 +147,7 @@
             count(0)
         from zhousb_comment
         <where>
+            (state = 1 or from_vid = #{fromVisitor.id})
             <if test="topicId == null">AND topic_id IS NULL</if>
             <if test="topicId != null">AND topic_id  = #{topicId}</if>
             <if test="blogId != null">AND blog_id = #{blogId}</if>
