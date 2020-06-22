@@ -8,6 +8,7 @@
         <id column="id" property="id"/>
         <result column="blog_id" property="blogId"/>
         <result column="topic_id" property="topicId"/>
+        <result column="content" property="content"/>
         <result column="state" property="state"/>
         <result column="reply_count" property="replyCount"/>
         <result column="gmt_create" property="gmtCreate"/>
