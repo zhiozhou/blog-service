@@ -15,7 +15,7 @@ import priv.zhou.misc.NULL;
  */
 public interface ICommentService {
 
-    OutVO<NULL> save(VisitorDTO visitorDTO, CommentDTO commentDTO);
+    OutVO<NULL> save(VisitorDTO visitorDTO, VisitorDTO inputDTO,CommentDTO commentDTO);
 
     OutVO<ListVO<CommentDTO>> list(VisitorDTO visitorDTO, CommentDTO commentDTO, Page page);
 

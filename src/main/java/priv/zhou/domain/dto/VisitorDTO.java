@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import priv.zhou.domain.po.VisitorPO;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.*;
 import java.util.Date;
 
 
@@ -33,16 +33,24 @@ public class VisitorDTO extends DTO<VisitorPO> {
     /**
      * 名称
      */
+    @NotBlank(message = "你是无名氏吗")
+    @Max(value = 5,message = "昵称过长")
+    @Min(value = 2,message = "昵称过短")
     private String nickname;
 
     /**
      * 邮箱
      */
+    @Max(value = 5,message = "你这邮箱对吗")
+    @Min(value = 2,message = "你这邮箱对吗")
+    @Email(message = "你这邮箱对吗")
     private String email;
 
     /**
      * 站点
      */
+    @Max(value = 256,message = "网址过长")
+    @Min(value = 2,message = "网址太顶级")
     private String website;
 
     /**

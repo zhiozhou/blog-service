@@ -7,6 +7,8 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import priv.zhou.domain.po.AccessLogPO;
 
+import java.util.Date;
+
 /**
  * 访问日志 数据传输模型
  *
@@ -44,6 +46,8 @@ public class AccessLogDTO extends DTO<AccessLogPO> {
      * 用户代理
      */
     private String userAgent;
+
+    private Date gmtCreate;
 
     @Override
     public AccessLogPO toPO() {

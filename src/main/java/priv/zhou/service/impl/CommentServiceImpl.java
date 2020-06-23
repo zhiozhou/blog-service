@@ -1,7 +1,6 @@
 package priv.zhou.service.impl;
 
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import priv.zhou.domain.Page;
 import priv.zhou.domain.dao.CommentDAO;
@@ -15,7 +14,6 @@ import priv.zhou.domain.vo.OutVO;
 import priv.zhou.misc.NULL;
 import priv.zhou.misc.OutVOEnum;
 import priv.zhou.service.ICommentService;
-import priv.zhou.tools.CheckUtil;
 import priv.zhou.tools.Md5Util;
 
 import java.util.Date;
@@ -41,20 +39,16 @@ public class CommentServiceImpl implements ICommentService {
     }
 
     @Override
-    public OutVO<NULL> save(VisitorDTO visitorDTO, CommentDTO commentDTO) {
-        VisitorDTO fromVisitor = commentDTO.getFromVisitor();
-        if (StringUtils.isBlank(fromVisitor.getNickname())) {
-            return OutVO.fail(OutVOEnum.EMPTY_PARAM, "昵称不可为空！");
-        } else if (StringUtils.isNotBlank(fromVisitor.getEmail())) {
-            if (CheckUtil.notEmail(fromVisitor.getEmail())) {
-                return OutVO.fail(OutVOEnum.EMPTY_PARAM, "邮箱格式对嘛？");
-            } else if (!fromVisitor.getEmail().equals(visitorDTO.getEmail())) {
-                fromVisitor.setAvatar(getGravatar(fromVisitor.getEmail()));
-            }
+    public OutVO<NULL> save(VisitorDTO visitorDTO, VisitorDTO inputDTO, CommentDTO commentDTO) {
+        if (null != commentDTO.getRepliedId() && null == commentDAO.get(new CommentDTO().setId(commentDTO.getRepliedId()))) {
+            return OutVO.fail(OutVOEnum.FAIL_PARAM);
         }
-        fromVisitor.setId(visitorDTO.getId())
-                .setLastAccessTime(new Date());
-        return visitorDAO.update(fromVisitor.toPO()) > 0 && commentDAO.save(commentDTO.toPO()) > 0 ?
+        return visitorDAO.update(inputDTO
+                .setId(visitorDTO.getId())
+                .setLastAccessTime(new Date()).toPO()) > 0 &&
+                commentDAO.save(commentDTO
+                        .setFromVisitor(inputDTO)
+                        .toPO()) > 0 ?
                 OutVO.success() :
                 OutVO.fail(OutVOEnum.LATER_RETRY);
     }

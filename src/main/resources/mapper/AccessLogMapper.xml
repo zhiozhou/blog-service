@@ -27,7 +27,7 @@
             #{api} ,
             #{param} ,
             #{userAgent} ,
-            NOW()
+            #{gmtCreate}
         )
     </insert>
 </mapper>

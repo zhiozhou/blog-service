@@ -11,6 +11,8 @@ import priv.zhou.domain.vo.OutVO;
 import priv.zhou.misc.NULL;
 import priv.zhou.service.ICommentService;
 
+import javax.validation.Valid;
+
 
 /**
  * 评论 控制层
@@ -29,8 +31,8 @@ public class CommentController {
     }
 
     @RequestMapping("/save")
-    public OutVO<NULL> save(@CurrentVisitor VisitorDTO visitorDTO, CommentDTO commentDTO) {
-        return commentService.save(visitorDTO, commentDTO);
+    public OutVO<NULL> save(@CurrentVisitor VisitorDTO visitorDTO, @Valid VisitorDTO inputDTO, @Valid CommentDTO commentDTO) {
+        return commentService.save(visitorDTO, inputDTO, commentDTO);
     }
 
     @RequestMapping("/list")

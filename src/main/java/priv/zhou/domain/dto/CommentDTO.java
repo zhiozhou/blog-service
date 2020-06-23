@@ -9,6 +9,8 @@ import lombok.experimental.Accessors;
 import priv.zhou.domain.po.CommentPO;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -58,13 +60,14 @@ public class CommentDTO extends DTO<CommentPO> {
     /**
      * 访客
      */
-    @NotNull(message = "昵称不可为空")
     private VisitorDTO fromVisitor;
 
     /**
      * 内容
      */
     @NotEmpty(message = "内容不可为空")
+    @Max(value = 256,message = "内容过长")
+    @Min(value = 3,message = "内容过短")
     private String content;
 
     /**

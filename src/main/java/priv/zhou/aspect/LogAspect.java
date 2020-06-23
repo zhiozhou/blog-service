@@ -16,6 +16,8 @@ import priv.zhou.tools.HttpUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.Date;
+
 import static priv.zhou.misc.CONSTANT.TOKEN_KEY;
 
 
@@ -77,7 +79,8 @@ public class LogAspect extends BaseAspect {
                 .setHost(HttpUtil.getIpAddress(request))
                 .setUserAgent(HttpUtil.getUserAgent(request))
                 .setApi(request.getRequestURI())
-                .setParam(HttpUtil.getParams(request));
+                .setParam(HttpUtil.getParams(request))
+                .setGmtCreate(new Date());
         treadmill.accessLog(accessLogDTO);
     }
 

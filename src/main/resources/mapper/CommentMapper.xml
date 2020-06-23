@@ -55,28 +55,24 @@
 
 
 
-    <insert id="save" parameterType="CommentPO">
+    <insert id="save" parameterType="CommentPO" >
         INSERT INTO zhousb_comment(
-             blog_id , 
-             topic_id , 
-             replied_id , 
-             to_vid , 
-             from_vid , 
-             content , 
-             state , 
+             blog_id ,
+             replied_id ,
+             from_vid ,
+             content ,
+             state ,
              gmt_create , 
              gmt_modified 
         )
         VALUES(
-            #{blogId} , 
-            #{topicId} , 
-            #{repliedId} , 
-            #{toVid} , 
-            #{fromVid} , 
+            #{blogId} ,
+            #{repliedId} ,
+            #{fromVisitor.id} ,
             #{content} , 
-            #{state} , 
-            #{gmtCreate} , 
-            #{gmtModified} 
+            0 ,
+            NOW() ,
+            NOW()
         )
     </insert>
 

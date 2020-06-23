@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import priv.zhou.domain.Page;
 import priv.zhou.domain.dto.BlogDTO;
 import priv.zhou.domain.dto.BlogTypeDTO;
+import priv.zhou.domain.dto.VisitorDTO;
 import priv.zhou.domain.vo.ListVO;
 import priv.zhou.domain.vo.OutVO;
 import priv.zhou.annotation.AccessLog;
