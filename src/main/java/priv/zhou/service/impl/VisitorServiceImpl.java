@@ -42,15 +42,21 @@ public class VisitorServiceImpl implements IVisitorService {
 
     @Override
     public OutVO<NULL> update(VisitorDTO visitorDTO) {
+        if (null == visitorDTO.getId()) {
+            return OutVO.fail(OutVOEnum.FAIL_PARAM);
+        }
+
         VisitorPO visitorPO = visitorDTO.toPO();
-        return visitorDAO.update(visitorPO) > 0 ?
-                OutVO.success() :
-                OutVO.fail(OutVOEnum.FAIL_OPERATION);
+        if (visitorDAO.update(visitorPO) < 1) {
+            return OutVO.fail(OutVOEnum.FAIL_OPERATION);
+        }
+        RedisUtil.set(VISITOR_KEY + visitorDTO.getId(), visitorPO);
+        return OutVO.success();
     }
 
 
     @Override
-    public OutVO<VisitorDTO> get(String token) throws Exception {
+    public OutVO<VisitorDTO> get(String token) {
         Integer id = TokenUtil.parseId(token);
         if (null == id) {
             return OutVO.fail(OutVOEnum.NEED_INIT);

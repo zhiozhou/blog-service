@@ -58,7 +58,7 @@ public class CommentPO implements Serializable{
 	/**
 	 * 状态
 	 */
-	private String state;
+	private Integer state;
 
 	/**
 	 * 创建时间

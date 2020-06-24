@@ -70,5 +70,4 @@ public class TokenUtil {
         return new SecretKeySpec(DatatypeConverter.parseBase64Binary("zhousb-blog"), SignatureAlgorithm.HS256.getJcaName());
     }
 
-
 }

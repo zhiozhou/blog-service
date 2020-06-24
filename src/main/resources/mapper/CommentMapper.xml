@@ -25,6 +25,7 @@
         <id column="reply_id" property="id"/>
         <result column="reply_content" property="content"/>
         <result column="reply_replied_id" property="repliedId"/>
+        <result column="reply_state" property="state"/>
         <result column="reply_gmt_create" property="gmtCreate"/>
         <association property="toVisitor" javaType="VisitorPO">
             <result column="reply_to_nickname" property="nickname"/>
@@ -36,12 +37,14 @@
         </association>
     </resultMap>
 
+
     <sql id="selectReply">
         SELECT
             reply1.`id` AS reply_id,
             reply1.topic_id AS reply_topic_id,
             reply1.replied_id AS reply_replied_id,
             reply1.content AS reply_content,
+            reply1.state AS reply_state,
             reply1.gmt_create AS reply_gmt_create,
             reply_to.nickname AS reply_to_nickname,
             reply_from.nickname AS reply_from_nickname,
@@ -53,12 +56,12 @@
             LEFT JOIN zhousb_visitor AS reply_to ON reply1.to_vid = reply_to.id AND reply1.replied_id IS NOT NULL
     </sql>
 
-
-
     <insert id="save" parameterType="CommentPO" >
         INSERT INTO zhousb_comment(
              blog_id ,
+             topic_id,
              replied_id ,
+             to_vid,
              from_vid ,
              content ,
              state ,
@@ -67,9 +70,11 @@
         )
         VALUES(
             #{blogId} ,
+            #{topicId} ,
             #{repliedId} ,
-            #{fromVisitor.id} ,
-            #{content} , 
+            #{toVisitor.id},
+            #{fromVisitor.id},
+            #{content} ,
             0 ,
             NOW() ,
             NOW()
@@ -99,6 +104,7 @@
                 topic.id,
                 topic.content,
                 topic.gmt_create,
+                topic.state,
                 topic_from.nickname AS topic_from_nickname,
                 topic_from.website AS topic_from_website,
                 topic_from.avatar AS topic_from_avatar,
@@ -111,6 +117,7 @@
                 AND (topic.state = 1 or topic.from_vid = #{dto.fromVisitor.id})
                 AND topic.blog_id = #{dto.blogId}
             </where>
+            ORDER BY topic.id DESC
             LIMIT ${(page.page - 1) * page.limit}, #{page.limit}
         ) topic
         LEFT JOIN (

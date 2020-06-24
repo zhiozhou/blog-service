@@ -8,11 +8,9 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import priv.zhou.domain.po.CommentPO;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 import java.util.List;
 
@@ -66,14 +64,14 @@ public class CommentDTO extends DTO<CommentPO> {
      * 内容
      */
     @NotEmpty(message = "内容不可为空")
-    @Max(value = 256,message = "内容过长")
-    @Min(value = 3,message = "内容过短")
+    @Pattern(regexp = "^.{3,256}$", message = "内容非法")
+    @Pattern(regexp = ".*[\u4e00-\u9fa5].*", message = "Can you speak chinese?")
     private String content;
 
     /**
      * 状态
      */
-    private String state;
+    private Integer state;
 
     /**
      * 创建时间
@@ -91,7 +89,6 @@ public class CommentDTO extends DTO<CommentPO> {
      */
     private List<CommentDTO> replyList;
 
-
     public CommentDTO(CommentPO commentPO) {
         super(commentPO);
         this.toVisitor = DTO.ofPO(commentPO.getToVisitor(), VisitorDTO::new);
@@ -99,4 +96,13 @@ public class CommentDTO extends DTO<CommentPO> {
         this.replyList = DTO.ofPO(commentPO.getReplyList(), CommentDTO::new);
     }
 
+    @Override
+    public CommentPO toPO() {
+        CommentPO commentPO = super.toPO()
+                .setFromVisitor(fromVisitor.toPO());
+        if (null != toVisitor) {
+            commentPO.setToVisitor(toVisitor.toPO());
+        }
+        return commentPO;
+    }
 }

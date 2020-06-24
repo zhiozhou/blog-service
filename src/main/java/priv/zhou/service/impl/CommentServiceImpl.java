@@ -4,7 +4,6 @@ package priv.zhou.service.impl;
 import org.springframework.stereotype.Service;
 import priv.zhou.domain.Page;
 import priv.zhou.domain.dao.CommentDAO;
-import priv.zhou.domain.dao.VisitorDAO;
 import priv.zhou.domain.dto.CommentDTO;
 import priv.zhou.domain.dto.DTO;
 import priv.zhou.domain.dto.VisitorDTO;
@@ -14,6 +13,7 @@ import priv.zhou.domain.vo.OutVO;
 import priv.zhou.misc.NULL;
 import priv.zhou.misc.OutVOEnum;
 import priv.zhou.service.ICommentService;
+import priv.zhou.service.IVisitorService;
 import priv.zhou.tools.Md5Util;
 
 import java.util.Date;
@@ -29,26 +29,45 @@ import java.util.List;
 public class CommentServiceImpl implements ICommentService {
 
 
-    private final VisitorDAO visitorDAO;
-
     private final CommentDAO commentDAO;
 
-    public CommentServiceImpl(VisitorDAO visitorDAO, CommentDAO commentDAO) {
-        this.visitorDAO = visitorDAO;
+    private final IVisitorService visitorService;
+
+    public CommentServiceImpl(CommentDAO commentDAO, IVisitorService visitorService) {
         this.commentDAO = commentDAO;
+        this.visitorService = visitorService;
     }
 
     @Override
     public OutVO<NULL> save(VisitorDTO visitorDTO, VisitorDTO inputDTO, CommentDTO commentDTO) {
-        if (null != commentDTO.getRepliedId() && null == commentDAO.get(new CommentDTO().setId(commentDTO.getRepliedId()))) {
-            return OutVO.fail(OutVOEnum.FAIL_PARAM);
+
+        // 1.校验参数
+        if (null != commentDTO.getRepliedId()) {
+            CommentPO targetPO = commentDAO.get(new CommentDTO().setId(commentDTO.getRepliedId()));
+            if (null == targetPO || targetPO.getState().equals(0)) {
+                return OutVO.fail(OutVOEnum.FAIL_PARAM);
+            }
+            commentDTO.setTopicId(targetPO.getTopicId())
+                    .setToVisitor(new VisitorDTO().setId(targetPO.getFromVisitor().getId()));
         }
-        return visitorDAO.update(inputDTO
-                .setId(visitorDTO.getId())
-                .setLastAccessTime(new Date()).toPO()) > 0 &&
-                commentDAO.save(commentDTO
-                        .setFromVisitor(inputDTO)
-                        .toPO()) > 0 ?
+
+        // 2.补充参数
+        visitorDTO.setNickname(inputDTO.getNickname())
+                .setWebsite(inputDTO.getWebsite())
+                .setLastAccessTime(new Date());
+        if (null != inputDTO.getEmail() && !inputDTO.getEmail().equals(visitorDTO.getEmail())) {
+            visitorDTO.setEmail(inputDTO.getEmail())
+                    .setAvatar(getGravatar(inputDTO.getEmail()));
+        }
+
+        // 3.修改访客
+        OutVO<NULL> updateRes = visitorService.update(visitorDTO);
+        if (updateRes.isFail()) {
+            return updateRes;
+        }
+
+        // 4.保存评论
+        return commentDAO.save(commentDTO.setFromVisitor(visitorDTO).toPO()) > 0 ?
                 OutVO.success() :
                 OutVO.fail(OutVOEnum.LATER_RETRY);
     }
@@ -85,10 +104,4 @@ public class CommentServiceImpl implements ICommentService {
     private String getGravatar(String email) {
         return String.format("https://s.gravatar.com/avatar/%s?s=48&r=g&d=identicon", Md5Util.encrypt(email));
     }
-
-
-    public static void main(String[] args) {
-        System.out.printf("https://s.gravatar.com/avatar/%s?s=48&r=g&d=identicon", Md5Util.encrypt("2080211280@qq.com"));
-    }
-
 }

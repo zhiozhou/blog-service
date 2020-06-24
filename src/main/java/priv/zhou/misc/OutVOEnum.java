@@ -18,7 +18,7 @@ public enum OutVOEnum {
 
     NOT_FOUND("0004", "数据不存在"),
 
-    NEED_INIT("0100", "尚未初始化"),
+    NEED_INIT("0100", "请允许cookie使用"),
 
     VERSION_DEPRECATED("0200", "版本过时"),
 

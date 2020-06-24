@@ -3,8 +3,8 @@ package priv.zhou.domain.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import priv.zhou.domain.po.VisitorPO;
 
@@ -26,7 +26,7 @@ import java.util.Date;
 public class VisitorDTO extends DTO<VisitorPO> {
 
     /**
-     * 
+     *
      */
     private Integer id;
 
@@ -34,23 +34,21 @@ public class VisitorDTO extends DTO<VisitorPO> {
      * 名称
      */
     @NotBlank(message = "你是无名氏吗")
-    @Max(value = 5,message = "昵称过长")
-    @Min(value = 2,message = "昵称过短")
+    @Pattern(regexp = "^.{2,64}$", message = "昵称非法")
     private String nickname;
 
     /**
      * 邮箱
      */
-    @Max(value = 5,message = "你这邮箱对吗")
-    @Min(value = 2,message = "你这邮箱对吗")
     @Email(message = "你这邮箱对吗")
+    @Pattern(regexp = "^.{2,64}$", message = "邮箱非法")
     private String email;
 
     /**
      * 站点
      */
-    @Max(value = 256,message = "网址过长")
-    @Min(value = 2,message = "网址太顶级")
+    @Pattern(regexp = "^.{2,256}$", message = "网址非法")
+    @Pattern(regexp = "^(http:\\\\/\\\\/|https:\\\\/\\\\/)?(www.)?([a-zA-Z0-9]+).[a-zA-Z0-9]*.[a-z]{3}.?([a-z]+)?$", message = "你这网址对吗")
     private String website;
 
     /**
