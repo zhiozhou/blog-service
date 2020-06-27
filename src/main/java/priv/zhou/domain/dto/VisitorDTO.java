@@ -57,6 +57,11 @@ public class VisitorDTO extends DTO<VisitorPO> {
     private String avatar;
 
     /**
+     * 徽章
+     */
+    private String badge;;
+
+    /**
      * 状态
      */
     private Integer state;

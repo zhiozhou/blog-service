@@ -48,7 +48,7 @@ public class MenuServiceImpl implements IMenuService {
     public Long latestVersion() {
         Long value = (Long) RedisUtil.get(MENU_MODIFIED_KEY);
         if (null == value) {
-            RedisUtil.set(MENU_MODIFIED_KEY, value = menuDAO.sumModifiedStamp(), 30, TimeUnit.MINUTES);
+            RedisUtil.set(MENU_MODIFIED_KEY, value = menuDAO.sumModifiedStamp());
         }
         return value;
     }

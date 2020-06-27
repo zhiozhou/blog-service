@@ -51,7 +51,6 @@ public class BlogServiceImpl implements IBlogService {
                 ? null != blogDTO.getType() && StringUtils.isBlank(blogDTO.getType().setState(SINGLE_BLOG_STATE).getKey()) ? BLOG_KEY + blogDTO.getType() : null
                 : BLOG_KEY + blogDTO.getId();
 
-
         if (null == poKey) {
             return OutVO.fail(OutVOEnum.EMPTY_PARAM);
         }

@@ -50,9 +50,10 @@ public class DictServiceImpl implements IDictService {
 
     @Override
     public Long latestVersion(String key) {
-        Long value = (Long) RedisUtil.get(DICT_DATA_MODIFIED_KEY);
+        String redisKey = DICT_DATA_MODIFIED_KEY + key;
+        Long value = (Long) RedisUtil.get(redisKey);
         if (null == value) {
-            RedisUtil.set(DICT_DATA_MODIFIED_KEY, value = dictDAO.getModifiedStamp(key), 30, TimeUnit.MINUTES);
+            RedisUtil.set(redisKey, value = dictDAO.getModifiedStamp(key), 30, TimeUnit.MINUTES);
         }
         return value;
     }

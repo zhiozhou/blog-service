@@ -98,11 +98,8 @@ public class CommentDTO extends DTO<CommentPO> {
 
     @Override
     public CommentPO toPO() {
-        CommentPO commentPO = super.toPO()
-                .setFromVisitor(fromVisitor.toPO());
-        if (null != toVisitor) {
-            commentPO.setToVisitor(toVisitor.toPO());
-        }
-        return commentPO;
+        return super.toPO()
+                .setFromVisitor(fromVisitor.toPO())
+                .setToVisitor(toPO(toVisitor));
     }
 }

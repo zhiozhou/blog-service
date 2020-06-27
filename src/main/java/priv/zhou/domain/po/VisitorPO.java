@@ -46,6 +46,11 @@ public class VisitorPO implements Serializable{
 	private String avatar;
 
 	/**
+	 * 徽章
+	 */
+	private String badge;
+
+	/**
 	 * 状态
 	 */
 	private Integer state;

@@ -17,6 +17,7 @@
             <result column="topic_from_nickname" property="nickname"/>
             <result column="topic_from_website" property="website"/>
             <result column="topic_from_avatar" property="avatar"/>
+            <result column="topic_from_badge" property="badge"/>
         </association>
         <collection  property="replyList"  resultMap="replyMap" ofType="CommentPO"/>
     </resultMap>
@@ -34,6 +35,7 @@
             <result column="reply_from_nickname" property="nickname"/>
             <result column="reply_from_website" property="website"/>
             <result column="reply_from_avatar" property="avatar"/>
+            <result column="reply_from_badge" property="badge"/>
         </association>
     </resultMap>
 
@@ -49,7 +51,8 @@
             reply_to.nickname AS reply_to_nickname,
             reply_from.nickname AS reply_from_nickname,
             reply_from.website AS reply_from_website,
-            reply_from.avatar AS reply_from_avatar
+            reply_from.avatar AS reply_from_avatar,
+            reply_from.badge AS reply_from_badge
         FROM
             zhousb_comment AS reply1
             LEFT JOIN zhousb_visitor AS reply_from ON reply1.from_vid = reply_from.id
@@ -108,6 +111,7 @@
                 topic_from.nickname AS topic_from_nickname,
                 topic_from.website AS topic_from_website,
                 topic_from.avatar AS topic_from_avatar,
+                topic_from.badge AS topic_from_badge,
                 ( SELECT count( 0 ) FROM zhousb_comment WHERE topic_id = topic.id ) AS reply_count
             FROM
                 zhousb_comment AS topic
