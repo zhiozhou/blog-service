@@ -45,16 +45,12 @@ public class BlogServiceImpl implements IBlogService {
 
     @Override
     public OutVO<BlogDTO> get(BlogDTO blogDTO) {
-
-        // 可按 id || 单文章类型的 key 来获取
-        String poKey = null == blogDTO.getId()
-                ? null != blogDTO.getType() && StringUtils.isBlank(blogDTO.getType().setState(SINGLE_BLOG_STATE).getKey()) ? BLOG_KEY + blogDTO.getType() : null
-                : BLOG_KEY + blogDTO.getId();
-
-        if (null == poKey) {
+        if(null == blogDTO.getId()){
             return OutVO.fail(OutVOEnum.EMPTY_PARAM);
         }
 
+        // 可按 id 与 key 查询
+        String poKey = BLOG_KEY + blogDTO.getId();
         BlogPO blogPO = (BlogPO) RedisUtil.get(poKey);
         if (null == blogPO) {
             if (null == (blogPO = blogDAO.get(blogDTO))) {
