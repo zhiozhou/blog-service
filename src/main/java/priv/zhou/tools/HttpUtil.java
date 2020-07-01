@@ -34,7 +34,7 @@ public class HttpUtil {
         String ip = request.getHeader("X-Forwarded-For");
         if (!emptyIp(ip)) {
             //多次反向代理后会有多个ip值,第0位ip才是真实ip
-            return ip.substring(0, ip.indexOf(","));
+            return ip.split(",")[0];
         }
 
         for (int i = 0; i < IP_HEADERS.length && emptyIp(ip); i++) {

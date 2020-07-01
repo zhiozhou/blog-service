@@ -93,8 +93,7 @@
             from_vid AS topic_from_id
         FROM
             zhousb_comment
-        WHERE
-            id = #{id}
+        WHERE id = #{id}
     </select>
 
     <select id="list"  resultMap="commentMap">
@@ -117,7 +116,7 @@
                 zhousb_comment AS topic
                 LEFT JOIN zhousb_visitor AS topic_from ON topic.from_vid = topic_from.id
             <where>
-                topic.topic_id IS NULL
+                topic.topic_id = 0
                 AND (topic.state = 1 or topic.from_vid = #{dto.fromVisitor.id})
                 AND topic.blog_id = #{dto.blogId}
             </where>
@@ -127,7 +126,8 @@
         LEFT JOIN (
             <include refid="selectReply"/>
             WHERE
-                (reply1.state = 1 or reply1.from_vid = #{dto.fromVisitor.id})
+                reply1.topic_id != 0
+                AND (reply1.state = 1 or reply1.from_vid = #{dto.fromVisitor.id})
                 AND 3 > (
                     SELECT
                         count( reply2.id )
