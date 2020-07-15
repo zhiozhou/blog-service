@@ -84,4 +84,6 @@ public class LogAspect extends BaseAspect {
         treadmill.accessLog(accessLogDTO);
     }
 
+
+
 }

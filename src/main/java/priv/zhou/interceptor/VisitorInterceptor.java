@@ -3,7 +3,9 @@ package priv.zhou.interceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+import priv.zhou.async.Treadmill;
 import priv.zhou.controller.DictController;
+import priv.zhou.domain.dto.AccessLogDTO;
 import priv.zhou.domain.dto.VisitorDTO;
 import priv.zhou.domain.vo.OutVO;
 import priv.zhou.service.IDictService;
@@ -17,6 +19,7 @@ import priv.zhou.tools.TokenUtil;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,13 +39,16 @@ import static priv.zhou.tools.TokenUtil.*;
 @Component
 public class VisitorInterceptor implements HandlerInterceptor {
 
+    private final Treadmill treadmill;
+
     private final IMenuService menuService;
 
     private final IDictService dictService;
 
     private final IVisitorService visitorService;
 
-    public VisitorInterceptor(IMenuService menuService, IDictService dictService, IVisitorService visitorService) {
+    public VisitorInterceptor(Treadmill treadmill, IMenuService menuService, IDictService dictService, IVisitorService visitorService) {
+        this.treadmill = treadmill;
         this.menuService = menuService;
         this.dictService = dictService;
         this.visitorService = visitorService;
@@ -53,12 +59,21 @@ public class VisitorInterceptor implements HandlerInterceptor {
         String token = CookieUtil.get(TOKEN_KEY, request);
         Map<String, Object> tokenMap = TokenUtil.parse(token);
         if (!TokenUtil.verify(tokenMap)) {
-            tokenMap = new HashMap<>();
             OutVO<VisitorDTO> createVO = visitorService.create();
             if (createVO.isFail()) {
                 HttpUtil.out(response, createVO);
                 return false;
             }
+            AccessLogDTO accessLogDTO = new AccessLogDTO()
+                    .setToken(token)
+                    .setHost(HttpUtil.getIpAddress(request))
+                    .setUserAgent(HttpUtil.getUserAgent(request))
+                    .setApi(request.getRequestURI())
+                    .setParam(HttpUtil.getParams(request))
+                    .setGmtCreate(new Date());
+            treadmill.accessLog(accessLogDTO);
+
+            tokenMap = new HashMap<>();
             tokenMap.put(VISITOR_ID, createVO.getData().getId());
             tokenMap.put(MENU_VERSION, menuService.latestVersion());
             tokenMap.put(SNS_VERSION, dictService.latestVersion(DictController.SNS_KEY));
