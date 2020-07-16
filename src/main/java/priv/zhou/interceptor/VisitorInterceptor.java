@@ -1,5 +1,7 @@
 package priv.zhou.interceptor;
 
+import eu.bitwalker.useragentutils.OperatingSystem;
+import eu.bitwalker.useragentutils.UserAgent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -8,6 +10,7 @@ import priv.zhou.controller.DictController;
 import priv.zhou.domain.dto.AccessLogDTO;
 import priv.zhou.domain.dto.VisitorDTO;
 import priv.zhou.domain.vo.OutVO;
+import priv.zhou.misc.OutVOEnum;
 import priv.zhou.service.IDictService;
 import priv.zhou.service.IMenuService;
 import priv.zhou.service.IVisitorService;
@@ -59,15 +62,24 @@ public class VisitorInterceptor implements HandlerInterceptor {
         String token = CookieUtil.get(TOKEN_KEY, request);
         Map<String, Object> tokenMap = TokenUtil.parse(token);
         if (!TokenUtil.verify(tokenMap)) {
+
+            String userAgent = HttpUtil.getUserAgent(request);
+            if("Unknown".equals(UserAgent.parseUserAgentString(userAgent).getBrowser())){
+                HttpUtil.out(response, OutVO.fail(OutVOEnum.ACCESS_BLOCK));
+                return false;
+            }
+
+
             OutVO<VisitorDTO> createVO = visitorService.create();
             if (createVO.isFail()) {
                 HttpUtil.out(response, createVO);
                 return false;
             }
+
             AccessLogDTO accessLogDTO = new AccessLogDTO()
                     .setToken(token)
                     .setHost(HttpUtil.getIpAddress(request))
-                    .setUserAgent(HttpUtil.getUserAgent(request))
+                    .setUserAgent(userAgent)
                     .setApi(request.getRequestURI())
                     .setParam(HttpUtil.getParams(request))
                     .setGmtCreate(new Date());
