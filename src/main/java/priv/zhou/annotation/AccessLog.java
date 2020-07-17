@@ -1,6 +1,6 @@
 package priv.zhou.annotation;
 
-import priv.zhou.aspect.LogAspect;
+import priv.zhou.aspect.WebAspect;
 
 import java.lang.annotation.*;
 
@@ -9,7 +9,7 @@ import java.lang.annotation.*;
  *
  * @author zhou
  * @since 2019.11.28
- * @see LogAspect#accessLog()
+ * @see WebAspect#accessLog()
  */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

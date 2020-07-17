@@ -2,13 +2,12 @@ package priv.zhou.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import priv.zhou.annotation.AccessLog;
 import priv.zhou.domain.Page;
 import priv.zhou.domain.dto.BlogDTO;
 import priv.zhou.domain.dto.BlogTypeDTO;
-import priv.zhou.domain.dto.VisitorDTO;
 import priv.zhou.domain.vo.ListVO;
 import priv.zhou.domain.vo.OutVO;
-import priv.zhou.annotation.AccessLog;
 import priv.zhou.service.IBlogService;
 
 import javax.validation.Valid;

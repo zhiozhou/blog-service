@@ -6,9 +6,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import priv.zhou.interceptor.VisitorInterceptor;
 import priv.zhou.resolver.VisitorResolver;
 import priv.zhou.tools.AppContextUtil;
 
@@ -21,12 +19,6 @@ import java.util.List;
  */
 @Configuration
 public class WebConfigurer implements WebMvcConfigurer {
-
-    private final VisitorInterceptor visitorInterceptor;
-
-    public WebConfigurer(VisitorInterceptor visitorInterceptor) {
-        this.visitorInterceptor = visitorInterceptor;
-    }
 
     /**
      * 支持跨域
@@ -52,19 +44,6 @@ public class WebConfigurer implements WebMvcConfigurer {
         argumentResolvers.add(AppContextUtil.getBean(VisitorResolver.class));
     }
 
-    /**
-     * 拦截器
-     */
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-
-        // todo: 之后根据需求拦截部分地址即可
-
-
-        registry.addInterceptor(visitorInterceptor)
-                .addPathPatterns("/**/**");
-
-    }
 
 
 }
