@@ -1,6 +1,5 @@
 package priv.zhou.interceptor;
 
-import eu.bitwalker.useragentutils.OperatingSystem;
 import eu.bitwalker.useragentutils.UserAgent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -63,35 +62,42 @@ public class VisitorInterceptor implements HandlerInterceptor {
         Map<String, Object> tokenMap = TokenUtil.parse(token);
         if (!TokenUtil.verify(tokenMap)) {
 
-            String userAgent = HttpUtil.getUserAgent(request);
-            if("Unknown".equals(UserAgent.parseUserAgentString(userAgent).getBrowser())){
+            // 1.校验请求
+            String requestApi = request.getRequestURI(),
+                    userAgent = HttpUtil.getUserAgent(request);
+            if ("/".equals(requestApi) || "/error".equals(requestApi)) {
+                HttpUtil.out(response, OutVO.fail(OutVOEnum.LATER_RETRY));
+                return false;
+            } else if ("Unknown".equals(UserAgent.parseUserAgentString(userAgent).getBrowser().toString())) {
                 HttpUtil.out(response, OutVO.fail(OutVOEnum.ACCESS_BLOCK));
                 return false;
             }
 
-
+            // 2.创建访客
             OutVO<VisitorDTO> createVO = visitorService.create();
             if (createVO.isFail()) {
                 HttpUtil.out(response, createVO);
                 return false;
             }
 
-            AccessLogDTO accessLogDTO = new AccessLogDTO()
-                    .setToken(token)
-                    .setHost(HttpUtil.getIpAddress(request))
-                    .setUserAgent(userAgent)
-                    .setApi(request.getRequestURI())
-                    .setParam(HttpUtil.getParams(request))
-                    .setGmtCreate(new Date());
-            treadmill.accessLog(accessLogDTO);
-
+            // 3.生成Token
             tokenMap = new HashMap<>();
             tokenMap.put(VISITOR_ID, createVO.getData().getId());
             tokenMap.put(MENU_VERSION, menuService.latestVersion());
             tokenMap.put(SNS_VERSION, dictService.latestVersion(DictController.SNS_KEY));
+            request.setAttribute(TOKEN_KEY, token = TokenUtil.build(tokenMap)); // 此次请求如果需要可以在attribute中取
 
-            // 此次请求如果需要可以在attribute中取
-            request.setAttribute(TOKEN_KEY, token = TokenUtil.build(tokenMap));
+            // 4.记录日志
+            AccessLogDTO accessLogDTO = new AccessLogDTO()
+                    .setToken(token)
+                    .setApi(requestApi)
+                    .setUserAgent(userAgent)
+                    .setParam(HttpUtil.getParams(request))
+                    .setHost(HttpUtil.getIpAddress(request))
+                    .setGmtCreate(new Date());
+            treadmill.accessLog(accessLogDTO);
+
+            // 5.存储Token
             Cookie cookie = CookieUtil.create(TOKEN_KEY, token);
             if (ParseUtil.bool(request.getHeader(SSR_HEADER_KEY))) {
                 // token暴露给服务器端

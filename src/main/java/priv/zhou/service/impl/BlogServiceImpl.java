@@ -2,7 +2,6 @@ package priv.zhou.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import priv.zhou.domain.Page;
 import priv.zhou.domain.dao.BlogDAO;
@@ -36,8 +35,6 @@ public class BlogServiceImpl implements IBlogService {
 
     private final BlogTypeDAO blogTypeDAO;
 
-    private final Integer SINGLE_BLOG_STATE = 7;
-
     public BlogServiceImpl(BlogDAO blogDAO, BlogTypeDAO blogTypeDAO) {
         this.blogDAO = blogDAO;
         this.blogTypeDAO = blogTypeDAO;
@@ -45,18 +42,19 @@ public class BlogServiceImpl implements IBlogService {
 
     @Override
     public OutVO<BlogDTO> get(BlogDTO blogDTO) {
-        if(null == blogDTO.getId()){
+
+        // 1.校验参数
+        if (null == blogDTO.getId()) {
             return OutVO.fail(OutVOEnum.EMPTY_PARAM);
         }
 
-        // 可按 id 与 key 查询
+        // 2.获取博客
         String poKey = BLOG_KEY + blogDTO.getId();
         BlogPO blogPO = (BlogPO) RedisUtil.get(poKey);
         if (null == blogPO) {
             if (null == (blogPO = blogDAO.get(blogDTO))) {
                 return OutVO.fail(OutVOEnum.NOT_FOUND);
-            }
-            if (!SINGLE_BLOG_STATE.equals(blogPO.getType().getState())) {
+            } else if (!Integer.valueOf(7).equals(blogPO.getType().getState())) {
                 BlogDTO queryDTO = new BlogDTO()
                         .setId(blogPO.getId())
                         .setType(new BlogTypeDTO().setKey(blogPO.getType().getKey()));
@@ -66,15 +64,15 @@ public class BlogServiceImpl implements IBlogService {
             RedisUtil.set(poKey, blogPO);
         }
 
-        // TODO: 部署多体改为 Reids 同步
+        // 3.增加访问数量
+        // TODO: 部署多体改为 Redis 同步
         synchronized (BLOG_PV_KEY) {
             String pvKey = blogPO.getId().toString();
             Long pv = (Long) RedisUtil.getHash(BLOG_PV_KEY, pvKey);
             if (null == pv) {
                 pv = blogPO.getPv();
             }
-            RedisUtil.putHash(BLOG_PV_KEY, pvKey, ++pv);
-            blogPO.setPv(pv);
+            RedisUtil.putHash(BLOG_PV_KEY, pvKey, blogPO.setPv(++pv).getPv());
         }
         return OutVO.success(new BlogDTO(blogPO));
     }
