@@ -47,7 +47,7 @@ public class CommentServiceImpl implements ICommentService {
             if (null == targetPO || targetPO.getState().equals(0)) {
                 return OutVO.fail(OutVOEnum.FAIL_PARAM);
             }
-            commentDTO.setTopicId(targetPO.getTopicId())
+            commentDTO.setTopicId(0 == targetPO.getTopicId() ? targetPO.getId() : targetPO.getTopicId())
                     .setToVisitor(new VisitorDTO().setId(targetPO.getFromVisitor().getId()));
         }
 

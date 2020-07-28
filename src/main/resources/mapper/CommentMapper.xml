@@ -62,23 +62,23 @@
     <insert id="save" parameterType="CommentPO" >
         INSERT INTO zhousb_comment(
              blog_id ,
-             topic_id,
              replied_id ,
              to_vid,
              from_vid ,
              content ,
              state ,
+            <if test="topicId != null">topic_id ,</if>
              gmt_create , 
              gmt_modified 
         )
         VALUES(
             #{blogId} ,
-            #{topicId} ,
             #{repliedId} ,
             #{toVisitor.id},
             #{fromVisitor.id},
             #{content} ,
             0 ,
+            <if test="topicId != null">#{topicId} ,</if>
             NOW() ,
             NOW()
         )
@@ -87,6 +87,7 @@
 
     <select id="get" parameterType="CommentDTO" resultMap="commentMap">
         SELECT
+            id,
             blog_id,
             topic_id,
             state,
@@ -156,7 +157,7 @@
         from zhousb_comment
         <where>
             (state = 1 or from_vid = #{fromVisitor.id})
-            <if test="topicId == null">AND topic_id IS NULL</if>
+            <if test="topicId == null">AND topic_id = 0</if>
             <if test="topicId != null">AND topic_id  = #{topicId}</if>
             <if test="blogId != null">AND blog_id = #{blogId}</if>
         </where>
