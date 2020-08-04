@@ -42,6 +42,10 @@ public class ExceptionAdvice {
     @SuppressWarnings("all")
     @ExceptionHandler(value = Exception.class)
     public void globalHand(HttpServletRequest request, HttpServletResponse response, Exception e) throws Exception {
+        if (e instanceof GlobalException) {
+            globalFailHand(request, response, (GlobalException) e);
+            return;
+        }
         StringBuilder builder = new StringBuilder("未知异常: request -->")
                 .append(request.getRequestURI()).append(" | ")
                 .append("请求参数 -->").append(HttpUtil.getParams(request)).append(" | ")
@@ -82,7 +86,6 @@ public class ExceptionAdvice {
         log.info("退出 {} 接口,返回报文 -->{}\n", request.getRequestURI(), e.getOutVO());
         HttpUtil.out(response, e.getOutVO());
     }
-
 
 
     private String getStackTrace(Throwable e) {

@@ -25,7 +25,6 @@ import priv.zhou.tools.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -85,7 +84,6 @@ public class WebAspect extends BaseAspect {
     }
 
 
-
     /**
      * 请求日志
      */
@@ -111,7 +109,7 @@ public class WebAspect extends BaseAspect {
      */
     @Order(2)
     @Before(value = "webCut()")
-    public void checkToken() throws Exception {
+    public void checkToken() throws GlobalException {
         HttpServletRequest request = getRequest();
 
         String token = CookieUtil.get(TOKEN_KEY, request);
@@ -122,7 +120,7 @@ public class WebAspect extends BaseAspect {
             String requestApi = request.getRequestURI(),
                     userAgent = HttpUtil.getUserAgent(request);
             if ("unknown".equalsIgnoreCase(UserAgent.parseUserAgentString(userAgent).getBrowser().toString())) {
-                throw new GlobalException( OutVO.fail(OutVOEnum.ACCESS_BLOCK));
+                throw new GlobalException(OutVO.fail(OutVOEnum.ACCESS_BLOCK));
             }
 
             // 2.创建访客
@@ -180,11 +178,6 @@ public class WebAspect extends BaseAspect {
                 .setGmtCreate(new Date());
         treadmill.accessLog(accessLogDTO);
     }
-
-
-
-
-
 
 
 }
