@@ -120,7 +120,7 @@ public class WebAspect extends BaseAspect {
             String requestApi = request.getRequestURI(),
                     userAgent = HttpUtil.getUserAgent(request);
             if ("unknown".equalsIgnoreCase(UserAgent.parseUserAgentString(userAgent).getBrowser().toString())) {
-                throw new GlobalException(OutVO.fail(OutVOEnum.ACCESS_BLOCK));
+                return;
             }
 
             // 2.创建访客
