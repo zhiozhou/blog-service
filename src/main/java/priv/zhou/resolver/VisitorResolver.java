@@ -35,7 +35,7 @@ public class VisitorResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
-        return methodParameter.getParameterAnnotation(CurrentVisitor.class) != null;
+        return methodParameter.hasParameterAnnotation(CurrentVisitor.class);
     }
 
     @Override
