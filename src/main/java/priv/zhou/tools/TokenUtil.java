@@ -3,10 +3,12 @@ package priv.zhou.tools;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.util.Maps;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -27,6 +29,13 @@ public class TokenUtil {
      * sns版本
      */
     public final static String SNS_VERSION = "snsVersion";
+
+
+    public static String build(String key, Object value) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(key,value);
+        return build(map);
+    }
 
 
     public static String build(Map<String, Object> claims) {
