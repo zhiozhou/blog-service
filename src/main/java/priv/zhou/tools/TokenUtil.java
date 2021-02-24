@@ -4,6 +4,9 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Maps;
+import priv.zhou.domain.vo.OutVO;
+import priv.zhou.exception.GlobalException;
+import priv.zhou.misc.OutVOEnum;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
@@ -48,9 +51,9 @@ public class TokenUtil {
      */
     public static Map<String, Object> parse(String jwt) {
         try {
-            return StringUtils.isBlank(jwt) ? null : Jwts.parser().setSigningKey(getKey()).parseClaimsJws(jwt).getBody();
-        } catch (Exception e) {
-            return null;
+            return Jwts.parser().setSigningKey(getKey()).parseClaimsJws(jwt).getBody();
+        }catch (Exception e){
+            throw new GlobalException(OutVO.fail(OutVOEnum.INVALID_TOKEN));
         }
     }
 

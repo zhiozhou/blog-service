@@ -8,7 +8,7 @@ import priv.zhou.domain.vo.OutVO;
  * 用于活动实体解析时进行抛出
  */
 @Getter
-public class GlobalException extends Exception {
+public class GlobalException extends RuntimeException {
 
     /**
      * 包含错误信息的vo对象
